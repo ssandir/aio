@@ -1,14 +1,13 @@
 import { defineStore } from 'pinia'
-
-type BuilderComponents = 'model' | 'trainingData'
+import type { BuilderComponents, State } from './types'
 
 export const useBuilderStore = defineStore('builder', {
-  state: () => ({
-    currentlyOpen: 'model' as BuilderComponents,
+  state: (): State => ({
+    currentlyOpen: 'model',
     data: {
       'model': {},
       'trainingData': {}
-    } as { [key in BuilderComponents]: object }
+    }
   }),
   getters: {
     getCurrentlyOpen(): string {
@@ -19,8 +18,25 @@ export const useBuilderStore = defineStore('builder', {
     }
   },
   actions: {
-    setCurrentlyOpen(nextOpen: BuilderComponents) {
+    setCurrentlyOpen (nextOpen: BuilderComponents) {
       this.currentlyOpen = nextOpen;
+    },
+    nextCurrentlyOpen() {
+      switch(this.currentlyOpen) {
+        case 'model':
+          this.setCurrentlyOpen('trainingData')
+          break;
+        case 'trainingData':
+          this.setCurrentlyOpen('model')
+          break;
+      }
+    },
+    addModelSelectionData (data: object) {
+      if (!('model' in data) || typeof data.model !== 'string') {
+        throw new Error('Invalid data.')
+      }
+
+      this.data.model = { [data.model]: {} };
     },
   },
 })
