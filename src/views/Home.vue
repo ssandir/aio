@@ -4,18 +4,18 @@
       <v-container v-if="!homeStore.getIsBuilderOpen" key="home" fluid fill-height class="bg-primary full-height">
         <v-row align="center" justify="center" class="home-header">
           <v-col cols="12" class="text-center">
-            <v-typography class="text-h1 text-secondary">
+            <v-card-title class="text-h1 text-secondary">
               My AI Online
-            </v-typography>
+            </v-card-title>
           </v-col>
         </v-row>
 
         <!-- New Row for content at the Bottom -->
         <v-row align="center" justify="center" class="home-footer">
           <v-col cols="12" class="text-center">
-            <v-typography class="text-body-1 text-secondary" @click.stop="homeStore.toggleBuilder()">
+            <v-card-text class="text-body-1 text-secondary" @click.stop="homeStore.toggleBuilder()">
               BUILD
-            </v-typography>
+            </v-card-text>
           </v-col>
         </v-row>
       </v-container>

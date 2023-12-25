@@ -19,9 +19,16 @@ export default createVuetify({
       main: {
         colors: {
           primary: colors.deepPurple.darken4,
-          secondary: colors.blue.lighten4,
+          secondary: colors.blue.lighten5,
+          'builder-0': colors.blue.darken4,
+          'builder-1': colors.teal.darken4,
+          'builder-2': colors.cyan.darken4,
+          'builder-3': colors.lightBlue.darken4,
+          'builder-4': colors.green.darken4,
+          'builder-5': colors.lightGreen.darken4,
+          'builder-6': colors.lime.darken4,
         },
-      },
+      },  
     },
   },
 })

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const useHomeStore = defineStore('app', {
+export const useHomeStore = defineStore('home', {
   state: () => ({
     isBuilderOpen: false
   }),
