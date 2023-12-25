@@ -6,7 +6,8 @@ export const useBuilderStore = defineStore('builder', {
   state: () => ({
     currentlyOpen: 'model' as BuilderComponents,
     data: {
-      'model': {}
+      'model': {},
+      'trainingData': {}
     } as { [key in BuilderComponents]: object }
   }),
   getters: {
@@ -14,7 +15,6 @@ export const useBuilderStore = defineStore('builder', {
       return this.currentlyOpen
     },
     getActiveComponents(): string[] {
-      console.error(this.data)
       return Object.keys(this.data) // we heavily rely on JS not shuffling object keys here
     }
   },

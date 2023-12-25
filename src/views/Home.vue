@@ -20,7 +20,7 @@
         </v-row>
       </v-container>
 
-      <v-sheet v-else key="builder">
+      <v-sheet v-else key="builder" class="full-height">
         <builder-base></builder-base>
       </v-sheet>
     </transition>

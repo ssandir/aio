@@ -1,12 +1,12 @@
 <template>
-    <builder-component-base 
-        v-for="(componentName, index) in builderStore.getActiveComponents"
-        :key="componentName"
-        :component-name="componentName"
-        :is-open="componentName === builderStore.getCurrentlyOpen"
-        :index="index"
-    > 
-    </builder-component-base>
+    <div class="builder-base">
+        <builder-component-base 
+            v-for="(componentName, index) in builderStore.getActiveComponents"
+            :key="componentName"
+            :component-name="componentName"
+            :is-open="componentName === builderStore.getCurrentlyOpen"
+            :index="index"/>
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -16,8 +16,9 @@ const builderStore = useBuilderStore()
 </script>
 
 <style>
-.full-height {
-  height: 100vh;
-  /* Set height to 100% of the viewport height */
+.builder-base {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 </style>
