@@ -1,4 +1,4 @@
-export type BuilderComponents = 'model' | 'trainingData'
+export type BuilderComponents = 'model' | 'trainingData' | 'trainingData2'
 
 export type State = {
     currentlyOpen: BuilderComponents,

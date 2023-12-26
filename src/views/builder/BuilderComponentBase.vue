@@ -1,12 +1,15 @@
 <template>
     <v-sheet :class="`bg-builder-${index} builder-component-base-${isOpen ? 'open' : 'closed'}`">
-        <model-open v-if="componentName === 'model' && isOpen" />
-        <model-closed v-if="componentName === 'model' && !isOpen" />
-        <training-data-open v-if="componentName === 'trainingData' && isOpen" />
-        <training-data-closed v-if="componentName === 'trainingData' && !isOpen" />
+        <div class="builder-component-base-inner">
+            <model-open v-if="componentName === 'model' && isOpen" />
+            <model-closed v-if="componentName === 'model' && !isOpen" />
+            <training-data-open v-if="componentName === 'trainingData' && isOpen" />
+            <training-data-closed v-if="componentName === 'trainingData' && !isOpen" />
+            <training-data-open v-if="componentName === 'trainingData2' && isOpen" />
+            <training-data-closed v-if="componentName === 'trainingData2' && !isOpen" />
+        </div>
     </v-sheet>
 </template>
-
 
 <script lang="ts" setup>
 import ModelClosed from './components/ModelClosed.vue'
@@ -23,10 +26,23 @@ defineProps<{
 
 <style>
 .builder-component-base-open {
-    flex: 1;
+    flex: 1 0 50px;
+    transition: flex 1.5s;
+    overflow: hidden;
 }
 
 .builder-component-base-closed {
-    height: 50px;
+    flex: 0 0 50px;
+    transition: flex 1.5s;
+    overflow: hidden;
+}
+
+/* 
+    Elements within the animated element shouldn't jump around while animation is in progress. 
+    Add an intermediate container with min-height set, so the content appears first as if y-transition and is then scaled to 100%
+*/
+.builder-component-base-inner {
+    height: 100%;
+    min-height: 400px;
 }
 </style>

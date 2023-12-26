@@ -6,7 +6,8 @@ export const useBuilderStore = defineStore('builder', {
     currentlyOpen: 'model',
     data: {
       'model': {},
-      'trainingData': {}
+      'trainingData': {},
+      'trainingData2': {}
     }
   }),
   getters: {

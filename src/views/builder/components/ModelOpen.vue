@@ -23,7 +23,8 @@
                 <v-tooltip location="top" :disabled="!isDoneButtonDisabled()">
                     <template v-slot:activator="{ props }">
                         <div v-bind="props" class="d-inline-block">
-                            <v-btn @click.stop="handleDoneClick" color="primary" :disabled="isDoneButtonDisabled()">Done</v-btn>
+                            <v-btn @click.stop="handleDoneClick" color="primary"
+                                :disabled="isDoneButtonDisabled()">Done</v-btn>
                         </div>
                     </template>
                     {{ doneButtonDisablers().join('\n') }}
