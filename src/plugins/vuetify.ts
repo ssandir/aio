@@ -20,6 +20,7 @@ export default createVuetify({
         colors: {
           primary: colors.deepPurple.darken4,
           secondary: colors.blue.lighten5,
+          error: colors.red.base,
           'builder-0': colors.blue.darken4,
           'builder-1': colors.teal.darken4,
           'builder-2': colors.cyan.darken4,

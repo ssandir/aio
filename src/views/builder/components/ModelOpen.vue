@@ -1,6 +1,6 @@
 <template>
     <v-container class="fill-height flex-column">
-        <!-- Title at the top -->
+        <!-- Title -->
         <v-row align="center" justify="center">
             <v-col cols="12" class="text-center">
                 <v-card-title class="text-h2 text-secondary">
@@ -9,15 +9,14 @@
             </v-col>
         </v-row>
 
-        <!-- Selection box in the middle -->
+        <!-- Model selection box-->
         <v-row align="center" justify="center" class="model-open-selection-box">
             <v-col cols="12">
-                <!-- Replace this with your actual selection box component -->
-                <v-select v-model="selectedModel" :items="models" label="Select a model"></v-select>
+                <v-select v-model="modelType" :items="models" label="Select a model"></v-select>
             </v-col>
         </v-row>
 
-        <!-- Done button at the bottom -->
+        <!-- Done button -->
         <v-row align="center" justify="center">
             <v-col cols="12" class="text-center">
                 <v-tooltip location="top" :disabled="!isDoneButtonDisabled()">
@@ -27,7 +26,7 @@
                                 :disabled="isDoneButtonDisabled()">Done</v-btn>
                         </div>
                     </template>
-                    {{ doneButtonDisablers().join('\n') }}
+                    {{ dataValidation }}
                 </v-tooltip>
             </v-col>
         </v-row>
@@ -35,30 +34,28 @@
 </template>
   
 <script lang="ts" setup>
-import { ref } from 'vue';
 import { models } from '@/store/builder/constants';
 import { useBuilderStore } from '@/store/builder/builder';
+import { computed, ref, watch } from 'vue';
 
 const builderStore = useBuilderStore();
 
-const selectedModel = ref<string | null>(null);
+const dataValidation = computed(() => builderStore.getModelDataValidation)
 
-const doneButtonDisablers = () => {
-    const disablers: string[] = [];
-    if (!selectedModel.value) {
-        disablers.push("Select a model.");
+const modelType = ref(builderStore.data.model?.type)
+
+watch(modelType, (newValue) => {
+    builderStore.data.model = {
+        ...builderStore.data.model,
+        type: newValue,
     }
-    return disablers;
-};
+})
 
 const isDoneButtonDisabled = (): boolean => {
-    return doneButtonDisablers().length > 0
+    return typeof dataValidation.value === 'string'
 }
 
 const handleDoneClick = () => {
-    builderStore.addModelSelectionData({
-        model: selectedModel.value,
-    })
     builderStore.nextCurrentlyOpen()
 };
 </script>

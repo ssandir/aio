@@ -1,6 +1,6 @@
 <template>
     <v-container class="fill-height flex-column">
-        <!-- Title at the top -->
+        <!-- Title -->
         <v-row align="center" justify="center">
             <v-col cols="12" class="text-center">
                 <v-card-title class="text-h2 text-secondary">
@@ -9,44 +9,69 @@
             </v-col>
         </v-row>
 
-        <!-- Done button at the bottom -->
+        <!-- URL input field -->
+        <v-row align="center" justify="center" class="training-data-open-url-input"> 
+            <v-col cols="12" class="text-center">
+                <v-text-field
+                    v-model="googleSpreadsheetUrl"
+                    label="Enter Google Spreadsheet URL"
+                    outlined
+                    solo-inverted
+                    :rules="[googleSpreadsheetUrlValidationRule]"
+                ></v-text-field>
+            </v-col>
+        </v-row>
+
+        <!-- Done button -->
         <v-row align="center" justify="center">
             <v-col cols="12" class="text-center">
                 <v-tooltip location="top" :disabled="!isDoneButtonDisabled()">
                     <template v-slot:activator="{ props }">
                         <div v-bind="props" class="d-inline-block">
-                            <v-btn @click.stop="handleDoneClick" color="primary"
-                                :disabled="isDoneButtonDisabled()">Done</v-btn>
+                            <v-btn @click.stop="handleDoneClick" color="primary" :disabled="isDoneButtonDisabled()">Done</v-btn>
                         </div>
                     </template>
-                    {{ doneButtonDisablers().join('\n') }}
+                    {{ dataValidation }}
                 </v-tooltip>
             </v-col>
         </v-row>
     </v-container>
 </template>
-  
+
 <script lang="ts" setup>
-import { useBuilderStore } from '@/store/builder/builder';
+import { useBuilderStore } from '@/store/builder/builder'
+import { computed, ref, watch } from 'vue';
+import { isValidGoogleSpreadsheetUrl } from '@/store/builder/trainingData/helpers'
 
-const builderStore = useBuilderStore();
+const builderStore = useBuilderStore()
 
-const doneButtonDisablers = () => {
-    const disablers: string[] = [];
-    return disablers;
-};
+const dataValidation = computed(() => builderStore.getTrainingDataValidation)
 
-const isDoneButtonDisabled = (): boolean => {
-    return doneButtonDisablers().length > 0
+const googleSpreadsheetUrl = ref(builderStore.data.trainingData?.url)
+
+watch(googleSpreadsheetUrl, (newValue) => {
+    builderStore.data.trainingData = {
+        ...builderStore.data.trainingData,
+        url: newValue,
+    }
+})
+
+const googleSpreadsheetUrlValidationRule = (url?: string): true | string => {
+    return url === undefined || isValidGoogleSpreadsheetUrl(url) || 'Enter a valid Google Spreadsheets URL'
+}
+
+const isDoneButtonDisabled = () => {
+    return typeof dataValidation.value === 'string'
 }
 
 const handleDoneClick = () => {
-    builderStore.nextCurrentlyOpen()
+    // Handle the click, for example, store the URL or perform other actions
+    builderStore.nextCurrentlyOpen();
 };
 </script>
-  
+
 <style>
-.model-open-selection-box {
+.training-data-open-url-input {
     width: 100%;
 }
 </style>
