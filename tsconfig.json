@@ -15,7 +15,8 @@
     "lib": ["esnext", "dom"],
     "types": [
       "node",
-      "vuetify"
+      "vuetify",
+      "vite/client"
     ],
     "paths": {
       "@/*": ["src/*"]

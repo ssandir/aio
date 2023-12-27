@@ -1,9 +1,22 @@
 <template>
   <v-app theme="main">
     <transition name="slide">
-      <v-container v-if="!homeStore.getIsBuilderOpen" key="home" fluid fill-height class="bg-primary full-height">
-        <v-row align="center" justify="center" class="home-header">
-          <v-col cols="12" class="text-center">
+      <v-container
+        v-if="!homeStore.getIsBuilderOpen"
+        key="home"
+        fluid
+        fill-height
+        class="bg-primary full-height"
+      >
+        <v-row
+          align="center"
+          justify="center"
+          class="home-header"
+        >
+          <v-col
+            cols="12"
+            class="text-center"
+          >
             <v-card-title class="text-h1 text-secondary">
               My AI Online
             </v-card-title>
@@ -11,24 +24,38 @@
         </v-row>
 
         <!-- New Row for content at the Bottom -->
-        <v-row align="center" justify="center" class="home-footer">
-          <v-col cols="12" class="text-center">
-            <v-card-text class="text-body-1 text-secondary" @click.stop="homeStore.toggleBuilder()">
+        <v-row
+          align="center"
+          justify="center"
+          class="home-footer"
+        >
+          <v-col
+            cols="12"
+            class="text-center"
+          >
+            <v-card-text
+              class="text-body-1 text-secondary"
+              @click.stop="homeStore.toggleBuilder()"
+            >
               BUILD
             </v-card-text>
           </v-col>
         </v-row>
       </v-container>
 
-      <v-sheet v-else key="builder" class="full-height">
-        <builder-base></builder-base>
+      <v-sheet
+        v-else
+        key="builder"
+        class="full-height"
+      >
+        <builder-base />
       </v-sheet>
     </transition>
   </v-app>
 </template>
 
 <script lang="ts" setup>
-import { useHomeStore } from '@/store/home/home';
+import { useHomeStore } from '@/store/home/home'
 import BuilderBase from './builder/BuilderBase.vue'
 const homeStore = useHomeStore()
 </script>
@@ -51,7 +78,7 @@ const homeStore = useHomeStore()
 .slide-leave-active {
   transition: transform 0.5s ease-in-out;
 }
-.slide-leave-to, 
+.slide-leave-to,
 .slide-enter-to {
   transform: translateY(-100%);
 }

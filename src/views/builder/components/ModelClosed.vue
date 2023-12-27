@@ -1,5 +1,5 @@
 <template>
-    Closed
+  Closed
 </template>
 
 <script lang="ts" setup>

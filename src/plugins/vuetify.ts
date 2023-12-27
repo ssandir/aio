@@ -27,9 +27,9 @@ export default createVuetify({
           'builder-3': colors.lightBlue.darken4,
           'builder-4': colors.green.darken4,
           'builder-5': colors.lightGreen.darken4,
-          'builder-6': colors.lime.darken4,
-        },
-      },  
-    },
-  },
+          'builder-6': colors.lime.darken4
+        }
+      }
+    }
+  }
 })

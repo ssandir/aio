@@ -1,14 +1,14 @@
 <template>
-    <v-sheet :class="`bg-builder-${index} builder-component-base-${isOpen ? 'open' : 'closed'}`">
-        <div class="builder-component-base-inner">
-            <model-open v-if="componentName === 'model' && isOpen" />
-            <model-closed v-if="componentName === 'model' && !isOpen" />
-            <training-data-open v-if="componentName === 'trainingData' && isOpen" />
-            <training-data-closed v-if="componentName === 'trainingData' && !isOpen" />
-            <training-data-open v-if="componentName === 'trainingData2' && isOpen" />
-            <training-data-closed v-if="componentName === 'trainingData2' && !isOpen" />
-        </div>
-    </v-sheet>
+  <v-sheet :class="`bg-builder-${index} builder-component-base-${isOpen ? 'open' : 'closed'}`">
+    <div class="builder-component-base-inner">
+      <model-open v-if="componentName === 'model' && isOpen" />
+      <model-closed v-if="componentName === 'model' && !isOpen" />
+      <training-data-open v-if="componentName === 'trainingData' && isOpen" />
+      <training-data-closed v-if="componentName === 'trainingData' && !isOpen" />
+      <training-data-open v-if="componentName === 'trainingData2' && isOpen" />
+      <training-data-closed v-if="componentName === 'trainingData2' && !isOpen" />
+    </div>
+  </v-sheet>
 </template>
 
 <script lang="ts" setup>
@@ -37,8 +37,8 @@ defineProps<{
     overflow: hidden;
 }
 
-/* 
-    Elements within the animated element shouldn't jump around while animation is in progress. 
+/*
+    Elements within the animated element shouldn't jump around while animation is in progress.
     Add an intermediate container with min-height set, so the content appears first as if y-transition and is then scaled to 100%
 */
 .builder-component-base-inner {

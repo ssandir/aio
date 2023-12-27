@@ -5,13 +5,13 @@ export const useHomeStore = defineStore('home', {
     isBuilderOpen: false
   }),
   getters: {
-    getIsBuilderOpen(): boolean {
-        return this.isBuilderOpen
+    getIsBuilderOpen (): boolean {
+      return this.isBuilderOpen
     }
   },
   actions: {
-    toggleBuilder() {
-      this.isBuilderOpen = !this.isBuilderOpen;
-    },
-  },
+    toggleBuilder () {
+      this.isBuilderOpen = !this.isBuilderOpen
+    }
+  }
 })
