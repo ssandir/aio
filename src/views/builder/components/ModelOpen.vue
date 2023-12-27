@@ -45,10 +45,7 @@ const dataValidation = computed(() => builderStore.getModelDataValidation)
 const modelType = ref(builderStore.data.model?.type)
 
 watch(modelType, (newValue) => {
-    builderStore.data.model = {
-        ...builderStore.data.model,
-        type: newValue,
-    }
+    builderStore.addModelDataAtrributeValue({type: newValue})
 })
 
 const isDoneButtonDisabled = (): boolean => {

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import type { BuilderComponents, State, ModelData, TrainingData } from './types'
+import type { BuilderComponents, State, ModelData, TrainingData, PartialTrainingData, PartialModelData } from './types'
 import { isValidModelType } from './model/helpers'
-import { isValidTrainingDataType, isValidTrainingDataGoogleSpreadsheetUrl } from './trainingData/helpers'
+import { isValidTrainingDataType, isValidTrainingDataGoogleSpreadsheetUrl, isValidTrainingDataSheetName } from './trainingData/helpers'
 
 export const useBuilderStore = defineStore('builder', {
   state: (): State => ({
@@ -41,6 +41,12 @@ export const useBuilderStore = defineStore('builder', {
         return 'Enter a valid Google Spreadsheets URL'
       }
 
+      if (!isValidTrainingDataSheetName(trainingData)) {
+        return 'Choose valid sheet name.'
+      }
+
+      console.error(trainingData)
+
       return trainingData
     }
   },
@@ -56,6 +62,18 @@ export const useBuilderStore = defineStore('builder', {
         case 'trainingData':
           this.setCurrentlyOpen('model')
           break;
+      }
+    },
+    addModelDataAtrributeValue (newData: PartialModelData) {
+      this.data.model = {
+        ...this.data.model,
+        ...newData,
+      }
+    },
+    addTrainingDataAttributeValue (newData: PartialTrainingData) {
+      this.data.trainingData = {
+        ...this.data.trainingData,
+        ...newData,
       }
     },
   },

@@ -16,6 +16,7 @@ type ModelDataBase<T extends Models> = {
 export type RegressionModelData = ModelDataBase<'Regression'>
 export type NeuralNetworModelData = ModelDataBase<'Neural Network'>
 export type ModelData = RegressionModelData | NeuralNetworModelData
+export type PartialModelData = DeepPartial<ModelData>
 
 export type TrainingDataTypes = 'Google Spreadsheet'
 type TrainingDataBase<T extends TrainingDataTypes> = {
@@ -23,8 +24,10 @@ type TrainingDataBase<T extends TrainingDataTypes> = {
 }
 export type GoogleSpreadsheetsTrainingData = TrainingDataBase<'Google Spreadsheet'> & {
     url: string
+    sheetName: string
 }
 export type TrainingData = GoogleSpreadsheetsTrainingData
+export type PartialTrainingData = DeepPartial<TrainingData>
 
 
 // helper types
