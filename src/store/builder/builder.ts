@@ -45,7 +45,9 @@ export const useBuilderStore = defineStore('builder', {
         return 'Choose valid sheet name.'
       }
 
-      console.error(trainingData)
+      if (!isValidTrainingDataSheetName(trainingData)) {
+        return 'Missing columnsHaveTitles data.'
+      }
 
       return trainingData
     }

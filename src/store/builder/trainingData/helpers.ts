@@ -7,11 +7,12 @@ export function isValidTrainingDataType (trainingData: DeepPartial<TrainingData>
 
 export function getGoogleSpreadsheetIdFromUrl (url?: string): string | false {
   if (url === undefined) return false
-  const googleSpreadsheetUrlPattern = /^https?:\/\/docs\.google\.com\/spreadsheets\/d\/([^/]+)($|(\/|\?|#)\S*$)/i
-  const matches = url.match(googleSpreadsheetUrlPattern)
-  if (matches == null) return false
-  if (matches[0] === undefined) return false
-  return matches[0]
+  const googleSpreadsheetUrlPattern = /^https?:\/\/docs\.google\.com\/spreadsheets\/d\/([^/]+)($|(\/|\?|#)\S*$)/ig
+  const matches = Array.from(url.matchAll(googleSpreadsheetUrlPattern))
+
+  if (matches === null) return false
+  if (matches[0][1] === undefined) return false
+  return matches[0][1]
 }
 
 export function isValidGoogleSpreadsheetUrl (url: string | undefined): url is string {
@@ -24,4 +25,8 @@ export function isValidTrainingDataGoogleSpreadsheetUrl (trainingData: DeepParti
 
 export function isValidTrainingDataSheetName (trainingData: DeepPartial<TrainingData> | undefined): trainingData is (DeepPartial<TrainingData> & { sheetName: string }) {
   return typeof trainingData?.sheetName === 'string'
+}
+
+export function isValidTrainingDataColumnsHaveTitles (trainingData: DeepPartial<TrainingData> | undefined): trainingData is (DeepPartial<TrainingData> & { columnsHaveTitles: boolean }) {
+  return typeof trainingData?.columnsHaveTitles === 'boolean'
 }

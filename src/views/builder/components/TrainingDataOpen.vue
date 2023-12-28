@@ -46,8 +46,33 @@
           v-model="columnsHaveTitles"
           hide-details
           inset
-          :label="`Columns ${columnsHaveTitles ? '' : 'don\'t'} have titles.}`"
+          :label="`Columns ${columnsHaveTitles ? '' : 'don\'t'} have titles.`"
         />
+      </v-col>
+    </v-row>
+
+    <!-- Data preview -->
+    <v-row
+      align="center"
+      justify="center"
+      class="training-data-open-url-input"
+    >
+      <v-col
+        cols="12"
+        class="text-center"
+      >
+        <v-card-text
+          v-if="googleSpreadsheetCsv"
+          class="text-body-1 text-secondary"
+        >
+          {{ googleSpreadsheetCsv }}
+        </v-card-text>
+        <v-card-text
+          v-else-if="googleSpreadsheetCsvText"
+          class="text-body-1 text-secondary"
+        >
+          {{ googleSpreadsheetCsvText }}
+        </v-card-text>
       </v-col>
     </v-row>
 
@@ -88,7 +113,7 @@
 <script lang="ts" setup>
 import { useBuilderStore } from '@/store/builder/builder'
 import { computed, ref, watch, Ref } from 'vue'
-import { isValidGoogleSpreadsheetUrl } from '@/store/builder/trainingData/helpers'
+import { getGoogleSpreadsheetIdFromUrl, isValidGoogleSpreadsheetUrl } from '@/store/builder/trainingData/helpers'
 
 const builderStore = useBuilderStore()
 
@@ -109,6 +134,16 @@ const sheetName = computed((): string | undefined => {
 })
 const sheetTitle: Ref<undefined | string> = ref(undefined)
 const columnsHaveTitles: Ref<boolean> = ref(true)
+const googleSpreadsheetCsvText: Ref<{ csvText: string } | string | undefined> = ref(undefined)
+const googleSpreadsheetCsv = computed((): string[][] | undefined => {
+  if (googleSpreadsheetCsvText.value === undefined || typeof googleSpreadsheetCsvText.value === 'string') {
+    return undefined
+  }
+
+  // havent found good synchronious csv parser that works with typescript
+  // also every value is wrapped in "
+  return googleSpreadsheetCsvText.value.csvText.split('\n').map((row) => row.split(',').map((value) => value.slice(1, -1)))
+})
 
 watch(googleSpreadsheetUrl, (newValue) => {
   builderStore.addTrainingDataAttributeValue({ url: newValue })
@@ -120,6 +155,10 @@ watch(googleSpreadsheetUrl, (newValue) => {
 
 watch(sheetName, (newValue) => {
   builderStore.addTrainingDataAttributeValue({ sheetName: newValue })
+
+  if (newValue !== undefined) {
+    getGoogleSpreadsheetCsv()
+  }
 })
 
 watch(columnsHaveTitles, (newValue) => {
@@ -143,7 +182,7 @@ const handleDoneClick = () => {
   builderStore.nextCurrentlyOpen()
 }
 
-const fetchSheetPage = async (url: string): Promise<Response> => {
+const fetchWithErrorCheck = async (url: string): Promise<Response> => {
   try {
     return await fetch(url)
   } catch (e) {
@@ -189,9 +228,10 @@ const getSheetTitle = async (text: string): Promise<string | undefined> => {
 
 const getSheetMetadata = async (url: string) => {
   sheetNames.value = undefined // this triggers reset of sheet name
+  googleSpreadsheetCsvText.value = undefined // this triggers reset of googleSpreadsheetCsv
   sheetTitle.value = undefined
   try {
-    const response = await fetchSheetPage(url)
+    const response = await fetchWithErrorCheck(url)
 
     if (!response.ok) {
       throw new Error(`Error: ${response.status} ${response.statusText}`)
@@ -208,6 +248,29 @@ const getSheetMetadata = async (url: string) => {
 
 const sheetNamesSelectionActive = (): boolean => {
   return Array.isArray(sheetNames.value) && sheetNames.value.length > 1
+}
+
+const getGoogleSpreadsheetCsv = async () => {
+  googleSpreadsheetCsvText.value = undefined
+  const spreadsheetId = getGoogleSpreadsheetIdFromUrl(googleSpreadsheetUrl.value)
+  try {
+    const csvUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:csv&sheet=${sheetName.value}`
+    const response = await fetchWithErrorCheck(csvUrl)
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} ${response.statusText}`)
+    }
+
+    const responseStream = response.body
+
+    if (!responseStream) {
+      throw new Error('Response stream is null.')
+    }
+
+    googleSpreadsheetCsvText.value = { csvText: await response.text() }
+  } catch (e) {
+    googleSpreadsheetCsvText.value = `${e}`
+  }
 }
 
 </script>
