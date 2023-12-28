@@ -32,15 +32,15 @@
           solo-inverted
           :rules="[googleSpreadsheetUrlValidationRule, googleSpreadsheetUrlFetchValidationRule]"
         />
+        <div v-if="sheetTitle !== undefined">
+          {{ sheetTitle }}
+        </div>
         <v-select
           v-if="sheetNamesSelectionActive()"
           v-model="selectedSheetName"
           :items="sheetNames as string[]"
           label="Select a sheet"
         />
-        <div v-else>
-          Sheet name: {{ sheetName }}
-        </div>
       </v-col>
     </v-row>
 
@@ -100,12 +100,13 @@ const sheetName = computed((): string | undefined => {
   }
   return undefined
 })
+const sheetTitle: Ref<undefined | string> = ref(undefined)
 
 watch(googleSpreadsheetUrl, (newValue) => {
   builderStore.addTrainingDataAttributeValue({ url: newValue })
 
   if (isValidGoogleSpreadsheetUrl(newValue)) {
-    getSheetNames(newValue)
+    getSheetMetadata(newValue)
   }
 })
 
@@ -146,13 +147,7 @@ const fetchSheetPage = async (url: string): Promise<Response> => {
   }
 }
 
-const handleSheetResponse = async (response: Response): Promise<string[]> => {
-  if (!response.ok) {
-    throw new Error(`Error: ${response.status} ${response.statusText}`)
-  }
-
-  const text = await response.text()
-
+const getSheetNames = async (text: string): Promise<string[]> => {
   const sheetNameExtractionRegex = /<div\s+class="(?:[^"]*\s+)?docs-sheet-tab-caption(?:\s+[^"]*)?">([^<]+)<\/div>/g
 
   let matches: string[] | null = []
@@ -168,11 +163,32 @@ const handleSheetResponse = async (response: Response): Promise<string[]> => {
   }
 }
 
-const getSheetNames = async (url: string) => {
+// getting sheet title is not breaking and should not throw
+const getSheetTitle = async (text: string): Promise<string | undefined> => {
+  const sheetTitleExtractionRegex = /<title>(.*?)<\/title>/g
+
+  const matches = Array.from(text.matchAll(sheetTitleExtractionRegex))
+  if (matches) {
+    return matches[0][1]
+  } else {
+    return undefined
+  }
+}
+
+const getSheetMetadata = async (url: string) => {
   sheetNames.value = undefined // this triggers reset of sheet name
+  sheetTitle.value = undefined
   try {
     const response = await fetchSheetPage(url)
-    sheetNames.value = await handleSheetResponse(response)
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} ${response.statusText}`)
+    }
+
+    const text = await response.text()
+
+    sheetNames.value = await getSheetNames(text)
+    sheetTitle.value = await getSheetTitle(text)
   } catch (e) {
     sheetNames.value = `${e}`
   }
