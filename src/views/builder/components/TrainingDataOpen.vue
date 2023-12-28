@@ -41,6 +41,13 @@
           :items="sheetNames as string[]"
           label="Select a sheet"
         />
+        <v-switch
+          v-if="sheetName !== undefined"
+          v-model="columnsHaveTitles"
+          hide-details
+          inset
+          :label="`Columns ${columnsHaveTitles ? '' : 'don\'t'} have titles.}`"
+        />
       </v-col>
     </v-row>
 
@@ -101,6 +108,7 @@ const sheetName = computed((): string | undefined => {
   return undefined
 })
 const sheetTitle: Ref<undefined | string> = ref(undefined)
+const columnsHaveTitles: Ref<boolean> = ref(true)
 
 watch(googleSpreadsheetUrl, (newValue) => {
   builderStore.addTrainingDataAttributeValue({ url: newValue })
@@ -112,6 +120,10 @@ watch(googleSpreadsheetUrl, (newValue) => {
 
 watch(sheetName, (newValue) => {
   builderStore.addTrainingDataAttributeValue({ sheetName: newValue })
+})
+
+watch(columnsHaveTitles, (newValue) => {
+  builderStore.addTrainingDataAttributeValue({ columnsHaveTitles: newValue })
 })
 
 const googleSpreadsheetUrlValidationRule = (url?: string): true | string => {

@@ -25,6 +25,7 @@ interface TrainingDataBase<T extends TrainingDataTypes> {
 export type GoogleSpreadsheetsTrainingData = TrainingDataBase<'Google Spreadsheet'> & {
   url: string
   sheetName: string
+  columnsHaveTitles: boolean
 }
 export type TrainingData = GoogleSpreadsheetsTrainingData
 export type PartialTrainingData = DeepPartial<TrainingData>
