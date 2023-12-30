@@ -1,11 +1,11 @@
-export type BuilderComponents = 'model' | 'trainingData' | 'trainingData2'
+export type BuilderComponents = 'model' | 'trainingData' | 'modelValidationData'
 
 export interface State {
   currentlyOpen: BuilderComponents
   data: DeepPartial<{
     model: ModelData
     trainingData: TrainingData
-    trainingData2: TrainingData
+    modelValidationData: ModelValidatonData
   }>
 }
 
@@ -30,6 +30,26 @@ export type GoogleSpreadsheetsTrainingData = TrainingDataBase<'Google Spreadshee
 }
 export type TrainingData = GoogleSpreadsheetsTrainingData
 export type PartialTrainingData = DeepPartial<TrainingData>
+
+export type ModelValidatonDataTypes = 'Training data' | 'Google Spreadsheet'
+interface ModelValidatonDataBase<T extends ModelValidatonDataTypes> {
+  type: T
+}
+export type GoogleSpreadsheetsModelValidatonData = ModelValidatonDataBase<'Google Spreadsheet'> & {
+  url: string
+  sheetName: string
+  columnsHaveTitles: boolean
+  csv: string[][]
+}
+export type TraningDataModelValidatonData = ModelValidatonDataBase<'Training data'>
+export type ModelValidatonData = GoogleSpreadsheetsModelValidatonData | TraningDataModelValidatonData
+export type PartialModelValidatonData = DeepPartial<ModelValidatonData>
+
+export interface BuilderComponentsToPartialData {
+  'model': PartialModelData
+  'trainingData': PartialTrainingData
+  'modelValidationData': PartialModelValidatonData
+}
 
 // helper types
 export type DeepPartial<T> = T extends object ? {

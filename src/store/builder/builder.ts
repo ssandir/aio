@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { BuilderComponents, State, ModelData, TrainingData, PartialTrainingData, PartialModelData } from './types'
+import type { BuilderComponents, State, ModelData, TrainingData, PartialTrainingData, PartialModelData, BuilderComponentsToPartialData, PartialModelValidatonData } from './types'
 import { isValidModelType } from './model/helpers'
 import {
   isValidTrainingDataType,
@@ -8,16 +8,13 @@ import {
   isValidTrainingDataColumnsHaveTitles,
   isValidTrainingDataCsv
 } from './trainingData/helpers'
+import { throwStatement } from '@babel/types'
 
 export const useBuilderStore = defineStore('builder', {
   state: (): State => ({
     currentlyOpen: 'model',
     data: {
-      model: {},
-      trainingData: {
-        type: 'Google Spreadsheet' // until more possible types
-      },
-      trainingData2: {}
+      model: {}
     }
   }),
   getters: {
@@ -66,14 +63,42 @@ export const useBuilderStore = defineStore('builder', {
     setCurrentlyOpen (nextOpen: BuilderComponents) {
       this.currentlyOpen = nextOpen
     },
+    addBuilderComponentIfNecessary (builderComponent: BuilderComponents) {
+      if (typeof this.data[builderComponent] === 'object') {
+        return
+      }
+
+      // until more possible types
+      if (builderComponent !== 'model') {
+        this.data[builderComponent] = {
+          type: 'Google Spreadsheet'
+        }
+      } else {
+        this.data[builderComponent] = {}
+      }
+    },
     nextCurrentlyOpen () {
       switch (this.currentlyOpen) {
         case 'model':
+          this.addBuilderComponentIfNecessary('trainingData')
           this.setCurrentlyOpen('trainingData')
           break
         case 'trainingData':
+          this.addBuilderComponentIfNecessary('modelValidationData')
           this.setCurrentlyOpen('model')
           break
+      }
+    },
+    addDataAttributeValue<T extends BuilderComponents>(attribute: T, newData: BuilderComponentsToPartialData[T]) {
+      switch (attribute) {
+        case 'model':
+          this.addModelDataAtrributeValue(newData as PartialModelData)
+          return
+        case 'trainingData':
+          this.addTrainingDataAttributeValue(newData as PartialTrainingData)
+          return
+        case 'modelValidationData':
+          this.addModelValidationDataAttributeValue(newData as PartialModelValidatonData)
       }
     },
     addModelDataAtrributeValue (newData: PartialModelData) {
@@ -85,6 +110,12 @@ export const useBuilderStore = defineStore('builder', {
     addTrainingDataAttributeValue (newData: PartialTrainingData) {
       this.data.trainingData = {
         ...this.data.trainingData,
+        ...newData
+      }
+    },
+    addModelValidationDataAttributeValue (newData: PartialModelValidatonData) {
+      this.data.modelValidationData = {
+        ...this.data.modelValidationData,
         ...newData
       }
     }
