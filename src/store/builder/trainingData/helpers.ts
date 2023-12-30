@@ -30,3 +30,7 @@ export function isValidTrainingDataSheetName (trainingData: DeepPartial<Training
 export function isValidTrainingDataColumnsHaveTitles (trainingData: DeepPartial<TrainingData> | undefined): trainingData is (DeepPartial<TrainingData> & { columnsHaveTitles: boolean }) {
   return typeof trainingData?.columnsHaveTitles === 'boolean'
 }
+
+export function isValidTrainingDataCsv (trainingData: DeepPartial<TrainingData> | undefined): trainingData is (DeepPartial<TrainingData> & { csv: string[][] }) {
+  return Array.isArray(trainingData?.csv) && trainingData.csv.every(row => Array.isArray(row))
+}

@@ -26,6 +26,7 @@ export type GoogleSpreadsheetsTrainingData = TrainingDataBase<'Google Spreadshee
   url: string
   sheetName: string
   columnsHaveTitles: boolean
+  csv: string[][]
 }
 export type TrainingData = GoogleSpreadsheetsTrainingData
 export type PartialTrainingData = DeepPartial<TrainingData>

@@ -165,6 +165,10 @@ watch(columnsHaveTitles, (newValue) => {
   builderStore.addTrainingDataAttributeValue({ columnsHaveTitles: newValue })
 })
 
+watch(googleSpreadsheetCsv, (newValue) => {
+  builderStore.addTrainingDataAttributeValue({ csv: newValue })
+})
+
 const googleSpreadsheetUrlValidationRule = (url?: string): true | string => {
   return url === undefined || isValidGoogleSpreadsheetUrl(url) || 'Enter a valid Google Spreadsheets URL'
 }

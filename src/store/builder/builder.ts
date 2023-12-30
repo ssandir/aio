@@ -1,7 +1,13 @@
 import { defineStore } from 'pinia'
 import type { BuilderComponents, State, ModelData, TrainingData, PartialTrainingData, PartialModelData } from './types'
 import { isValidModelType } from './model/helpers'
-import { isValidTrainingDataType, isValidTrainingDataGoogleSpreadsheetUrl, isValidTrainingDataSheetName } from './trainingData/helpers'
+import {
+  isValidTrainingDataType,
+  isValidTrainingDataGoogleSpreadsheetUrl,
+  isValidTrainingDataSheetName,
+  isValidTrainingDataColumnsHaveTitles,
+  isValidTrainingDataCsv
+} from './trainingData/helpers'
 
 export const useBuilderStore = defineStore('builder', {
   state: (): State => ({
@@ -45,7 +51,11 @@ export const useBuilderStore = defineStore('builder', {
         return 'Choose valid sheet name.'
       }
 
-      if (!isValidTrainingDataSheetName(trainingData)) {
+      if (!isValidTrainingDataColumnsHaveTitles(trainingData)) {
+        return 'Missing columnsHaveTitles data.'
+      }
+
+      if (!isValidTrainingDataCsv(trainingData)) {
         return 'Missing columnsHaveTitles data.'
       }
 
