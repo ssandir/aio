@@ -5,8 +5,8 @@
       <model-closed v-if="componentName === 'model' && !isOpen" />
       <training-data-open v-if="componentName === 'trainingData' && isOpen" />
       <training-data-closed v-if="componentName === 'trainingData' && !isOpen" />
-      <training-data-open v-if="componentName === 'trainingData2' && isOpen" />
-      <training-data-closed v-if="componentName === 'trainingData2' && !isOpen" />
+      <model-validation-data-open v-if="componentName === 'modelValidationData' && isOpen" />
+      <model-validation-data-closed v-if="componentName === 'modelValidationData' && !isOpen" />
     </div>
   </v-sheet>
 </template>
@@ -16,9 +16,12 @@ import ModelClosed from './components/ModelClosed.vue'
 import ModelOpen from './components/ModelOpen.vue'
 import TrainingDataClosed from './components/TrainingDataClosed.vue'
 import TrainingDataOpen from './components/TrainingDataOpen.vue'
+import ModelValidationDataOpen from './components/ModelValidationDataOpen.vue'
+import ModelValidationDataClosed from './components/ModelValidationDataClosed.vue'
+import { BuilderComponents } from '@/store/builder/types'
 
 defineProps<{
-    componentName: string
+    componentName: BuilderComponents
     isOpen: boolean
     index: number
 }>()

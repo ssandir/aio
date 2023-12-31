@@ -41,8 +41,8 @@ export type GoogleSpreadsheetsModelValidatonData = ModelValidatonDataBase<'Googl
   columnsHaveTitles: boolean
   csv: string[][]
 }
-export type TraningDataModelValidatonData = ModelValidatonDataBase<'Training data'>
-export type ModelValidatonData = GoogleSpreadsheetsModelValidatonData | TraningDataModelValidatonData
+export type TrainingDataModelValidatonData = ModelValidatonDataBase<'Training data'>
+export type ModelValidatonData = GoogleSpreadsheetsModelValidatonData | TrainingDataModelValidatonData
 export type PartialModelValidatonData = DeepPartial<ModelValidatonData>
 
 export interface BuilderComponentsToPartialData {

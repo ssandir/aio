@@ -1,14 +1,18 @@
 import { defineStore } from 'pinia'
-import type { BuilderComponents, State, ModelData, TrainingData, PartialTrainingData, PartialModelData, BuilderComponentsToPartialData, PartialModelValidatonData } from './types'
+import type { BuilderComponents, State, ModelData, TrainingData, PartialTrainingData, PartialModelData, BuilderComponentsToPartialData, PartialModelValidatonData, ModelValidatonData } from './types'
 import { isValidModelType } from './model/helpers'
 import {
   isValidTrainingDataType,
   isValidTrainingDataGoogleSpreadsheetUrl,
   isValidTrainingDataSheetName,
   isValidTrainingDataColumnsHaveTitles,
-  isValidTrainingDataCsv
+  isValidTrainingDataCsv,
+  isValidModelValidationDataType,
+  isValidModelValidationDataGoogleSpreadsheetUrl,
+  isValidModelValidationDataSheetName,
+  isValidModelValidationDataColumnsHaveTitles,
+  isValidModelValidationDataCsv
 } from './trainingData/helpers'
-import { throwStatement } from '@babel/types'
 
 export const useBuilderStore = defineStore('builder', {
   state: (): State => ({
@@ -21,8 +25,8 @@ export const useBuilderStore = defineStore('builder', {
     getCurrentlyOpen (): string {
       return this.currentlyOpen
     },
-    getActiveComponents (): string[] {
-      return Object.keys(this.data) // we heavily rely on JS not shuffling object keys here
+    getActiveComponents (): BuilderComponents[] {
+      return Object.keys(this.data) as BuilderComponents[] // we heavily rely on JS not shuffling object keys here
     },
     getModelDataValidation (): ModelData | string {
       const model = this.data.model
@@ -40,23 +44,54 @@ export const useBuilderStore = defineStore('builder', {
         return 'Select a data source type.'
       }
 
-      if (!isValidTrainingDataGoogleSpreadsheetUrl(trainingData)) {
-        return 'Enter a valid Google Spreadsheets URL'
+      if (trainingData.type === 'Google Spreadsheet') {
+        if (!isValidTrainingDataGoogleSpreadsheetUrl(trainingData)) {
+          return 'Enter a valid Google Spreadsheets URL'
+        }
+
+        if (!isValidTrainingDataSheetName(trainingData)) {
+          return 'Choose valid sheet name.'
+        }
+
+        if (!isValidTrainingDataColumnsHaveTitles(trainingData)) {
+          return 'Missing columnsHaveTitles data.'
+        }
+
+        if (!isValidTrainingDataCsv(trainingData)) {
+          return 'Missing columnsHaveTitles data.'
+        }
+
+        return trainingData
       }
 
-      if (!isValidTrainingDataSheetName(trainingData)) {
-        return 'Choose valid sheet name.'
+      throw new Error('unhandled type')
+    },
+    getModelValidationDataValidation (): ModelValidatonData | string {
+      const modelValidationData = this.data.modelValidationData
+
+      if (!isValidModelValidationDataType(modelValidationData)) {
+        return 'Select a data source type.'
       }
 
-      if (!isValidTrainingDataColumnsHaveTitles(trainingData)) {
-        return 'Missing columnsHaveTitles data.'
+      if (modelValidationData.type === 'Google Spreadsheet') {
+        if (!isValidModelValidationDataGoogleSpreadsheetUrl(modelValidationData)) {
+          return 'Enter a valid Google Spreadsheets URL'
+        }
+
+        if (!isValidModelValidationDataSheetName(modelValidationData)) {
+          return 'Choose valid sheet name.'
+        }
+
+        if (!isValidModelValidationDataColumnsHaveTitles(modelValidationData)) {
+          return 'Missing columnsHaveTitles data.'
+        }
+
+        if (!isValidModelValidationDataCsv(modelValidationData)) {
+          return 'Missing columnsHaveTitles data.'
+        }
       }
 
-      if (!isValidTrainingDataCsv(trainingData)) {
-        return 'Missing columnsHaveTitles data.'
-      }
-
-      return trainingData
+      return modelValidationData
     }
   },
   actions: {
@@ -85,7 +120,7 @@ export const useBuilderStore = defineStore('builder', {
           break
         case 'trainingData':
           this.addBuilderComponentIfNecessary('modelValidationData')
-          this.setCurrentlyOpen('model')
+          this.setCurrentlyOpen('modelValidationData')
           break
       }
     },

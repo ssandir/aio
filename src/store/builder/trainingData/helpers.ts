@@ -1,5 +1,5 @@
-import { TrainingDataTypes, TrainingData, DeepPartial } from '../types'
-import { trainingDataTypes } from '../constants'
+import { TrainingDataTypes, TrainingData, DeepPartial, ModelValidatonData, ModelValidatonDataTypes, GoogleSpreadsheetsModelValidatonData, GoogleSpreadsheetsTrainingData } from '../types'
+import { trainingDataTypes, modelValidationDataTypes } from '../constants'
 
 export function isValidTrainingDataType (trainingData: DeepPartial<TrainingData> | undefined): trainingData is (DeepPartial<TrainingData> & { type: TrainingDataTypes }) {
   return !(trainingData == null) && trainingDataTypes.includes(trainingData.type as TrainingDataTypes)
@@ -19,18 +19,38 @@ export function isValidGoogleSpreadsheetUrl (url: string | undefined): url is st
   return typeof getGoogleSpreadsheetIdFromUrl(url) === 'string'
 }
 
-export function isValidTrainingDataGoogleSpreadsheetUrl (trainingData: DeepPartial<TrainingData> | undefined): trainingData is (DeepPartial<TrainingData> & { url: string }) {
+export function isValidTrainingDataGoogleSpreadsheetUrl (trainingData: DeepPartial<GoogleSpreadsheetsTrainingData> | undefined): trainingData is (DeepPartial<GoogleSpreadsheetsTrainingData> & { url: string }) {
   return isValidGoogleSpreadsheetUrl(trainingData?.url)
 }
 
-export function isValidTrainingDataSheetName (trainingData: DeepPartial<TrainingData> | undefined): trainingData is (DeepPartial<TrainingData> & { sheetName: string }) {
+export function isValidTrainingDataSheetName (trainingData: DeepPartial<GoogleSpreadsheetsTrainingData> | undefined): trainingData is (DeepPartial<GoogleSpreadsheetsTrainingData> & { sheetName: string }) {
   return typeof trainingData?.sheetName === 'string'
 }
 
-export function isValidTrainingDataColumnsHaveTitles (trainingData: DeepPartial<TrainingData> | undefined): trainingData is (DeepPartial<TrainingData> & { columnsHaveTitles: boolean }) {
+export function isValidTrainingDataColumnsHaveTitles (trainingData: DeepPartial<GoogleSpreadsheetsTrainingData> | undefined): trainingData is (DeepPartial<GoogleSpreadsheetsTrainingData> & { columnsHaveTitles: boolean }) {
   return typeof trainingData?.columnsHaveTitles === 'boolean'
 }
 
-export function isValidTrainingDataCsv (trainingData: DeepPartial<TrainingData> | undefined): trainingData is (DeepPartial<TrainingData> & { csv: string[][] }) {
+export function isValidTrainingDataCsv (trainingData: DeepPartial<GoogleSpreadsheetsTrainingData> | undefined): trainingData is (DeepPartial<GoogleSpreadsheetsTrainingData> & { csv: string[][] }) {
   return Array.isArray(trainingData?.csv) && trainingData.csv.every(row => Array.isArray(row))
+}
+
+export function isValidModelValidationDataType (modelValidationData: DeepPartial<ModelValidatonData> | undefined): modelValidationData is (DeepPartial<ModelValidatonData> & { type: ModelValidatonDataTypes }) {
+  return !(modelValidationData == null) && modelValidationDataTypes.includes(modelValidationData.type as ModelValidatonDataTypes)
+}
+
+export function isValidModelValidationDataGoogleSpreadsheetUrl (modelValidationData: DeepPartial<GoogleSpreadsheetsModelValidatonData> | undefined): modelValidationData is (DeepPartial<GoogleSpreadsheetsModelValidatonData> & { url: string }) {
+  return isValidGoogleSpreadsheetUrl(modelValidationData?.url)
+}
+
+export function isValidModelValidationDataSheetName (modelValidationData: DeepPartial<GoogleSpreadsheetsModelValidatonData> | undefined): modelValidationData is (DeepPartial<GoogleSpreadsheetsModelValidatonData> & { sheetName: string }) {
+  return typeof modelValidationData?.sheetName === 'string'
+}
+
+export function isValidModelValidationDataColumnsHaveTitles (modelValidationData: DeepPartial<GoogleSpreadsheetsModelValidatonData> | undefined): modelValidationData is (DeepPartial<GoogleSpreadsheetsModelValidatonData> & { columnsHaveTitles: boolean }) {
+  return typeof modelValidationData?.columnsHaveTitles === 'boolean'
+}
+
+export function isValidModelValidationDataCsv (modelValidationData: DeepPartial<GoogleSpreadsheetsModelValidatonData> | undefined): modelValidationData is (DeepPartial<GoogleSpreadsheetsModelValidatonData> & { csv: string[][] }) {
+  return Array.isArray(modelValidationData?.csv) && modelValidationData.csv.every(row => Array.isArray(row))
 }
