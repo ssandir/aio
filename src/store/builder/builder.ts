@@ -25,6 +25,9 @@ export const useBuilderStore = defineStore('builder', {
     getCurrentlyOpen (): string {
       return this.currentlyOpen
     },
+    getComponentsNumber (): number {
+      return Object.keys(this.data).length
+    },
     getActiveComponents (): BuilderComponents[] {
       return Object.keys(this.data) as BuilderComponents[] // we heavily rely on JS not shuffling object keys here
     },
@@ -121,6 +124,9 @@ export const useBuilderStore = defineStore('builder', {
         case 'trainingData':
           this.addBuilderComponentIfNecessary('modelValidationData')
           this.setCurrentlyOpen('modelValidationData')
+          break
+        case 'modelValidationData':
+          this.setCurrentlyOpen('model')
           break
       }
     },

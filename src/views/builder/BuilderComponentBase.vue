@@ -1,5 +1,8 @@
 <template>
-  <v-sheet :class="`bg-builder-${index} builder-component-base-${isOpen ? 'open' : 'closed'}`">
+  <v-sheet
+    :class="`bg-builder-${index} builder-component-base-${isOpen ? 'open' : 'closed'}`"
+    :style="{ '--dynamic-height': dynamicHeight }"
+  >
     <div class="builder-component-base-inner">
       <model-open v-if="componentName === 'model' && isOpen" />
       <model-closed v-if="componentName === 'model' && !isOpen" />
@@ -19,17 +22,23 @@ import TrainingDataOpen from './components/TrainingDataOpen.vue'
 import ModelValidationDataOpen from './components/ModelValidationDataOpen.vue'
 import ModelValidationDataClosed from './components/ModelValidationDataClosed.vue'
 import { BuilderComponents } from '@/store/builder/types'
+import { useBuilderStore } from '@/store/builder/builder'
+import { computed } from 'vue'
 
 defineProps<{
     componentName: BuilderComponents
     isOpen: boolean
     index: number
 }>()
+
+const builderStore = useBuilderStore()
+
+const dynamicHeight = computed(() => `calc(100vh - ${builderStore.getComponentsNumber * 50}px)`)
 </script>
 
 <style>
 .builder-component-base-open {
-    flex: 1 0 50px;
+    flex: 1 0 var(--dynamic-height);
     transition: flex 1.5s;
     overflow: hidden;
 }
