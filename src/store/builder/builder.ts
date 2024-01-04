@@ -142,21 +142,21 @@ export const useBuilderStore = defineStore('builder', {
           this.addModelValidationDataAttributeValue(newData as PartialModelValidatonData)
       }
     },
-    addModelDataAtrributeValue (newData: PartialModelData) {
+    addModelDataAtrributeValue (newData: PartialModelData, replace = false) {
       this.data.model = {
-        ...this.data.model,
+        ...(replace ? {} : this.data.model),
         ...newData
       }
     },
-    addTrainingDataAttributeValue (newData: PartialTrainingData) {
+    addTrainingDataAttributeValue (newData: PartialTrainingData, replace = false) {
       this.data.trainingData = {
-        ...this.data.trainingData,
+        ...(replace ? {} : this.data.trainingData),
         ...newData
       }
     },
-    addModelValidationDataAttributeValue (newData: PartialModelValidatonData) {
+    addModelValidationDataAttributeValue (newData: PartialModelValidatonData, replace = false) {
       this.data.modelValidationData = {
-        ...this.data.modelValidationData,
+        ...(replace ? {} : this.data.modelValidationData),
         ...newData
       }
     }

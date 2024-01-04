@@ -87,13 +87,17 @@
 
 <script lang="ts" setup>
 import { useBuilderStore } from '@/store/builder/builder'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import GoogleSpreadsheets from './shared/GoogleSpreadsheets.vue'
 
 const builderStore = useBuilderStore()
 
 const dataValidation = computed(() => builderStore.getModelValidationDataValidation)
 const dataType = ref(builderStore.data.modelValidationData?.type)
+
+watch(dataType, (newValue) => {
+  builderStore.addModelValidationDataAttributeValue({ type: newValue }, true)
+})
 
 const isDoneButtonDisabled = () => {
   return typeof dataValidation.value === 'string'
