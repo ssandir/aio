@@ -65,6 +65,7 @@
 import { useBuilderStore } from '@/store/builder/builder'
 import { computed, ref, watch, Ref } from 'vue'
 import { getGoogleSpreadsheetIdFromUrl, isValidGoogleSpreadsheetUrl } from '@/store/builder/trainingData/helpers'
+import { PartialGoogleSpeadsheetData } from '@/store/builder/types'
 
 const props = defineProps<{
     dataAttribute: 'trainingData' | 'modelValidationData'
@@ -72,10 +73,10 @@ const props = defineProps<{
 
 const builderStore = useBuilderStore()
 
-const builderStoreData = computed(() => builderStore.data[props.dataAttribute])
-const googleSpreadsheetUrl: Ref<undefined | string> = ref(builderStoreData.value?.type === 'Google Spreadsheet' ? builderStoreData.value.url : undefined)
+const builderStoreData = computed(() => builderStore.data[props.dataAttribute] as PartialGoogleSpeadsheetData)
+const googleSpreadsheetUrl: Ref<undefined | string> = ref(builderStoreData.value.url)
 const sheetNames: Ref<undefined | string[] | string> = ref(undefined)
-const selectedSheetName: Ref<undefined | string> = ref(builderStoreData.value?.type === 'Google Spreadsheet' ? builderStoreData.value.sheetName : undefined)
+const selectedSheetName: Ref<undefined | string> = ref(builderStoreData.value.sheetName)
 const sheetName = computed((): string | undefined => {
   if (Array.isArray(sheetNames.value) && sheetNames.value.length === 1) {
     return sheetNames.value[0]
@@ -87,7 +88,10 @@ const sheetName = computed((): string | undefined => {
   return undefined
 })
 const sheetTitle: Ref<undefined | string> = ref(undefined)
-const columnsHaveTitles: Ref<boolean> = ref(true)
+if (builderStoreData.value.columnsHaveTitles === undefined) {
+  builderStore.addDataAttributeValue(props.dataAttribute, { columnsHaveTitles: true })
+}
+const columnsHaveTitles: Ref<boolean> = ref(builderStoreData.value.columnsHaveTitles ?? true)
 const googleSpreadsheetCsvText: Ref<{ csvText: string } | string | undefined> = ref(undefined)
 const googleSpreadsheetCsv = computed((): string[][] | undefined => {
   if (googleSpreadsheetCsvText.value === undefined || typeof googleSpreadsheetCsvText.value === 'string') {

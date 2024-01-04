@@ -18,16 +18,19 @@ export type NeuralNetworModelData = ModelDataBase<'Neural Network'>
 export type ModelData = RegressionModelData | NeuralNetworModelData
 export type PartialModelData = DeepPartial<ModelData>
 
-export type TrainingDataTypes = 'Google Spreadsheet'
-interface TrainingDataBase<T extends TrainingDataTypes> {
-  type: T
-}
-export type GoogleSpreadsheetsTrainingData = TrainingDataBase<'Google Spreadsheet'> & {
+interface GoogleSpreadsheetData {
   url: string
   sheetName: string
   columnsHaveTitles: boolean
   csv: string[][]
 }
+export type PartialGoogleSpeadsheetData = DeepPartial<GoogleSpreadsheetData>
+
+export type TrainingDataTypes = 'Google Spreadsheet'
+interface TrainingDataBase<T extends TrainingDataTypes> {
+  type: T
+}
+export type GoogleSpreadsheetsTrainingData = TrainingDataBase<'Google Spreadsheet'> & GoogleSpreadsheetData
 export type TrainingData = GoogleSpreadsheetsTrainingData
 export type PartialTrainingData = DeepPartial<TrainingData>
 
@@ -35,12 +38,7 @@ export type ModelValidatonDataTypes = 'Training data' | 'Google Spreadsheet'
 interface ModelValidatonDataBase<T extends ModelValidatonDataTypes> {
   type: T
 }
-export type GoogleSpreadsheetsModelValidatonData = ModelValidatonDataBase<'Google Spreadsheet'> & {
-  url: string
-  sheetName: string
-  columnsHaveTitles: boolean
-  csv: string[][]
-}
+export type GoogleSpreadsheetsModelValidatonData = ModelValidatonDataBase<'Google Spreadsheet'> & GoogleSpreadsheetData
 export type TrainingDataModelValidatonData = ModelValidatonDataBase<'Training data'>
 export type ModelValidatonData = GoogleSpreadsheetsModelValidatonData | TrainingDataModelValidatonData
 export type PartialModelValidatonData = DeepPartial<ModelValidatonData>
