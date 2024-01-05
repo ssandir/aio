@@ -1,4 +1,4 @@
-export type BuilderComponents = 'model' | 'trainingData' | 'modelValidationData'
+export type BuilderComponents = 'model' | 'trainingData' | 'modelValidationData' | 'targetColumn'
 
 export interface State {
   currentlyOpen: BuilderComponents
@@ -6,6 +6,7 @@ export interface State {
     model: ModelData
     trainingData: TrainingData
     modelValidationData: ModelValidatonData
+    targetColumn: TargetColumnData
   }>
 }
 
@@ -43,10 +44,16 @@ export type TrainingDataModelValidatonData = ModelValidatonDataBase<'Training da
 export type ModelValidatonData = GoogleSpreadsheetsModelValidatonData | TrainingDataModelValidatonData
 export type PartialModelValidatonData = DeepPartial<ModelValidatonData>
 
+export interface TargetColumnData {
+  name: string
+}
+export type PartialTargetColumnData = DeepPartial<TargetColumnData>
+
 export interface BuilderComponentsToPartialData {
   'model': PartialModelData
   'trainingData': PartialTrainingData
   'modelValidationData': PartialModelValidatonData
+  'targetColumn': PartialTargetColumnData
 }
 
 // helper types

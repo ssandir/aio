@@ -10,6 +10,8 @@
       <training-data-closed v-if="componentName === 'trainingData' && !isOpen" />
       <model-validation-data-open v-if="componentName === 'modelValidationData' && isOpen" />
       <model-validation-data-closed v-if="componentName === 'modelValidationData' && !isOpen" />
+      <target-column-open v-if="componentName === 'targetColumn' && isOpen" />
+      <target-column-closed v-if="componentName === 'targetColumn' && !isOpen" />
     </div>
   </v-sheet>
 </template>
@@ -21,6 +23,8 @@ import TrainingDataClosed from './components/TrainingDataClosed.vue'
 import TrainingDataOpen from './components/TrainingDataOpen.vue'
 import ModelValidationDataOpen from './components/ModelValidationDataOpen.vue'
 import ModelValidationDataClosed from './components/ModelValidationDataClosed.vue'
+import TargetColumnClosed from './components/TargetColumnClosed.vue'
+import TargetColumnOpen from './components/TargetColumnOpen.vue'
 import { BuilderComponents } from '@/store/builder/types'
 import { useBuilderStore } from '@/store/builder/builder'
 import { computed } from 'vue'

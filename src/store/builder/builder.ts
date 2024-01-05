@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { BuilderComponents, State, ModelData, TrainingData, PartialTrainingData, PartialModelData, BuilderComponentsToPartialData, PartialModelValidatonData, ModelValidatonData } from './types'
+import type { BuilderComponents, State, ModelData, TrainingData, PartialTrainingData, PartialModelData, BuilderComponentsToPartialData, PartialModelValidatonData, ModelValidatonData, PartialTargetColumnData, TargetColumnData } from './types'
 import { isValidModelType } from './model/helpers'
 import {
   isValidTrainingDataType,
@@ -11,7 +11,8 @@ import {
   isValidModelValidationDataGoogleSpreadsheetUrl,
   isValidModelValidationDataSheetName,
   isValidModelValidationDataColumnsHaveTitles,
-  isValidModelValidationDataCsv
+  isValidModelValidationDataCsv,
+  isValidTargetColumnDataName
 } from './trainingData/helpers'
 
 export const useBuilderStore = defineStore('builder', {
@@ -30,6 +31,13 @@ export const useBuilderStore = defineStore('builder', {
     },
     getActiveComponents (): BuilderComponents[] {
       return Object.keys(this.data) as BuilderComponents[] // we heavily rely on JS not shuffling object keys here
+    },
+    getCsvColumnNames (): string[] | string {
+      const trainingDataValidation = this.getTrainingDataValidation
+      if (typeof trainingDataValidation === 'string') {
+        return `Training data must be selected first. ${trainingDataValidation}`
+      }
+      return trainingDataValidation.csv[0]
     },
     getModelDataValidation (): ModelData | string {
       const model = this.data.model
@@ -95,6 +103,15 @@ export const useBuilderStore = defineStore('builder', {
       }
 
       return modelValidationData
+    },
+    getTargetColumnDataValidation (): TargetColumnData | string {
+      const targetColumnData = this.data.targetColumn
+
+      if (!isValidTargetColumnDataName(targetColumnData)) {
+        return 'Select a target column.'
+      }
+
+      return targetColumnData
     }
   },
   actions: {
@@ -107,7 +124,7 @@ export const useBuilderStore = defineStore('builder', {
       }
 
       // until more possible types
-      if (builderComponent !== 'model') {
+      if (builderComponent === 'trainingData' || builderComponent === 'modelValidationData') {
         this.data[builderComponent] = {
           type: 'Google Spreadsheet'
         }
@@ -126,6 +143,10 @@ export const useBuilderStore = defineStore('builder', {
           this.setCurrentlyOpen('modelValidationData')
           break
         case 'modelValidationData':
+          this.addBuilderComponentIfNecessary('targetColumn')
+          this.setCurrentlyOpen('targetColumn')
+          break
+        case 'targetColumn':
           this.setCurrentlyOpen('model')
           break
       }
@@ -140,6 +161,9 @@ export const useBuilderStore = defineStore('builder', {
           return
         case 'modelValidationData':
           this.addModelValidationDataAttributeValue(newData as PartialModelValidatonData)
+          return
+        case 'targetColumn':
+          this.addTargetColumnDataAttributeValue(newData as PartialTargetColumnData)
       }
     },
     addModelDataAtrributeValue (newData: PartialModelData, replace = false) {
@@ -157,6 +181,12 @@ export const useBuilderStore = defineStore('builder', {
     addModelValidationDataAttributeValue (newData: PartialModelValidatonData, replace = false) {
       this.data.modelValidationData = {
         ...(replace ? {} : this.data.modelValidationData),
+        ...newData
+      }
+    },
+    addTargetColumnDataAttributeValue (newData: PartialTargetColumnData, replace = false) {
+      this.data.targetColumn = {
+        ...(replace ? {} : this.data.targetColumn),
         ...newData
       }
     }
