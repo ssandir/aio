@@ -1,0 +1,13 @@
+{
+  "name": "models",
+  "version": "1.0.0",
+  "description": "ML models",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint . --ignore-path .gitignore --max-warnings 0",
+    "lint-fix": "eslint . --fix --ignore-path .gitignore --max-warnings 0"
+  },
+  "dependencies": {
+    "ml-matrix": "^6.11.0"
+  }
+}
