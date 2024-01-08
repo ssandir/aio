@@ -17,6 +17,25 @@
 
     <google-spreadsheets data-attribute="trainingData" />
 
+    <v-row
+      align="center"
+      justify="center"
+      class="training-data-open-url-input"
+    >
+      <v-col
+        cols="12"
+        class="text-center"
+      >
+        <v-switch
+          v-if="builderStore.data.trainingData?.csv !== undefined"
+          v-model="columnsHaveTitles"
+          hide-details
+          inset
+          :label="`Columns ${columnsHaveTitles ? '' : 'don\'t'} have titles.`"
+        />
+      </v-col>
+    </v-row>
+
     <!-- Done button -->
     <v-row
       align="center"
@@ -53,12 +72,21 @@
 
 <script lang="ts" setup>
 import { useBuilderStore } from '@/store/builder/builder'
-import { computed } from 'vue'
+import { Ref, computed, ref, watch } from 'vue'
 import GoogleSpreadsheets from './shared/GoogleSpreadsheets.vue'
 
 const builderStore = useBuilderStore()
 
 const dataValidation = computed(() => builderStore.getTrainingDataValidation)
+
+if (builderStore.data.trainingData?.columnsHaveTitles === undefined) {
+  builderStore.addTrainingDataAttributeValue({ columnsHaveTitles: true })
+}
+const columnsHaveTitles: Ref<boolean> = ref(builderStore.data.trainingData?.columnsHaveTitles ?? true)
+
+watch(columnsHaveTitles, (newValue) => {
+  builderStore.addTrainingDataAttributeValue({ columnsHaveTitles: newValue })
+})
 
 const isDoneButtonDisabled = () => {
   return typeof dataValidation.value === 'string'

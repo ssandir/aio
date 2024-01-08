@@ -47,10 +47,6 @@ export function isValidModelValidationDataSheetName (modelValidationData: DeepPa
   return typeof modelValidationData?.sheetName === 'string'
 }
 
-export function isValidModelValidationDataColumnsHaveTitles (modelValidationData: DeepPartial<GoogleSpreadsheetsModelValidatonData> | undefined): modelValidationData is (DeepPartial<GoogleSpreadsheetsModelValidatonData> & { columnsHaveTitles: boolean }) {
-  return typeof modelValidationData?.columnsHaveTitles === 'boolean'
-}
-
 export function isValidModelValidationDataCsv (modelValidationData: DeepPartial<GoogleSpreadsheetsModelValidatonData> | undefined): modelValidationData is (DeepPartial<GoogleSpreadsheetsModelValidatonData> & { csv: string[][] }) {
   return Array.isArray(modelValidationData?.csv) && modelValidationData.csv.every(row => Array.isArray(row))
 }

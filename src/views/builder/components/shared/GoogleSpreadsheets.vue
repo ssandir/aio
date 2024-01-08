@@ -25,13 +25,6 @@
         :items="sheetNames as string[]"
         label="Select a sheet"
       />
-      <v-switch
-        v-if="sheetName !== undefined"
-        v-model="columnsHaveTitles"
-        hide-details
-        inset
-        :label="`Columns ${columnsHaveTitles ? '' : 'don\'t'} have titles.`"
-      />
     </v-col>
   </v-row>
 
@@ -88,10 +81,6 @@ const sheetName = computed((): string | undefined => {
   return undefined
 })
 const sheetTitle: Ref<undefined | string> = ref(undefined)
-if (builderStoreData.value.columnsHaveTitles === undefined) {
-  builderStore.addDataAttributeValue(props.dataAttribute, { columnsHaveTitles: true })
-}
-const columnsHaveTitles: Ref<boolean> = ref(builderStoreData.value.columnsHaveTitles ?? true)
 const googleSpreadsheetCsvText: Ref<{ csvText: string } | string | undefined> = ref(undefined)
 const googleSpreadsheetCsv = computed((): string[][] | undefined => {
   if (googleSpreadsheetCsvText.value === undefined || typeof googleSpreadsheetCsvText.value === 'string') {
@@ -117,10 +106,6 @@ watch(sheetName, (newValue) => {
   if (newValue !== undefined) {
     getGoogleSpreadsheetCsv()
   }
-})
-
-watch(columnsHaveTitles, (newValue) => {
-  builderStore.addDataAttributeValue(props.dataAttribute, { columnsHaveTitles: newValue })
 })
 
 watch(googleSpreadsheetCsv, (newValue) => {

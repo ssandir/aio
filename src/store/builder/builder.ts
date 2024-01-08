@@ -10,7 +10,6 @@ import {
   isValidModelValidationDataType,
   isValidModelValidationDataGoogleSpreadsheetUrl,
   isValidModelValidationDataSheetName,
-  isValidModelValidationDataColumnsHaveTitles,
   isValidModelValidationDataCsv,
   isValidTargetColumnDataName
 } from './trainingData/helpers'
@@ -55,6 +54,10 @@ export const useBuilderStore = defineStore('builder', {
         return 'Select a data source type.'
       }
 
+      if (!isValidTrainingDataColumnsHaveTitles(trainingData)) {
+        return 'Missing columnsHaveTitles data.'
+      }
+
       if (trainingData.type === 'Google Spreadsheet') {
         if (!isValidTrainingDataGoogleSpreadsheetUrl(trainingData)) {
           return 'Enter a valid Google Spreadsheets URL'
@@ -64,12 +67,8 @@ export const useBuilderStore = defineStore('builder', {
           return 'Choose valid sheet name.'
         }
 
-        if (!isValidTrainingDataColumnsHaveTitles(trainingData)) {
-          return 'Missing columnsHaveTitles data.'
-        }
-
         if (!isValidTrainingDataCsv(trainingData)) {
-          return 'Missing columnsHaveTitles data.'
+          return 'Missing csv data.'
         }
 
         return trainingData
@@ -91,10 +90,6 @@ export const useBuilderStore = defineStore('builder', {
 
         if (!isValidModelValidationDataSheetName(modelValidationData)) {
           return 'Choose valid sheet name.'
-        }
-
-        if (!isValidModelValidationDataColumnsHaveTitles(modelValidationData)) {
-          return 'Missing columnsHaveTitles data.'
         }
 
         if (!isValidModelValidationDataCsv(modelValidationData)) {

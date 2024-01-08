@@ -2,12 +2,14 @@ export type BuilderComponents = 'model' | 'trainingData' | 'modelValidationData'
 
 export interface State {
   currentlyOpen: BuilderComponents
-  data: DeepPartial<{
-    model: ModelData
-    trainingData: TrainingData
-    modelValidationData: ModelValidatonData
-    targetColumn: TargetColumnData
-  }>
+  data: DeepPartial<BuilderData>
+}
+
+export interface BuilderData {
+  model: ModelData
+  trainingData: TrainingData
+  modelValidationData: ModelValidatonData
+  targetColumn: TargetColumnData
 }
 
 export type Models = 'Regression' | 'Neural Network'
@@ -22,7 +24,6 @@ export type PartialModelData = DeepPartial<ModelData>
 interface GoogleSpreadsheetData {
   url: string
   sheetName: string
-  columnsHaveTitles: boolean
   csv: string[][]
 }
 export type PartialGoogleSpeadsheetData = DeepPartial<GoogleSpreadsheetData>
@@ -30,6 +31,7 @@ export type PartialGoogleSpeadsheetData = DeepPartial<GoogleSpreadsheetData>
 export type TrainingDataTypes = 'Google Spreadsheet'
 interface TrainingDataBase<T extends TrainingDataTypes> {
   type: T
+  columnsHaveTitles: boolean
 }
 export type GoogleSpreadsheetsTrainingData = TrainingDataBase<'Google Spreadsheet'> & GoogleSpreadsheetData
 export type TrainingData = GoogleSpreadsheetsTrainingData

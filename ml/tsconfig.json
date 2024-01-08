@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "rootDir": "..",
     "baseUrl": ".",
     "target": "esnext",
     "useDefineForClassFields": true,
@@ -16,11 +17,15 @@
     "types": [
       "node"
     ],
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "paths": {
+      "@root/*": ["../*"]
+    }
   },
   "include": [
     "**/*.ts",
     "**/*.d.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "../src/store/builder/types.ts"
   ]
 }
