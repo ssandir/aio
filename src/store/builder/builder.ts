@@ -11,7 +11,9 @@ import {
   isValidModelValidationDataGoogleSpreadsheetUrl,
   isValidModelValidationDataSheetName,
   isValidModelValidationDataCsv,
-  isValidTargetColumnDataName
+  isValidTargetColumnDataName,
+  validateColumnTitleRow,
+  validateRowsHaveSameColumnNumber
 } from './trainingData/helpers'
 
 export const useBuilderStore = defineStore('builder', {
@@ -36,7 +38,7 @@ export const useBuilderStore = defineStore('builder', {
       if (typeof trainingDataValidation === 'string') {
         return `Training data must be selected first. ${trainingDataValidation}`
       }
-      return trainingDataValidation.csv[0]
+      return trainingDataValidation.columnsHaveTitles ? trainingDataValidation.csv[0] : Array.from({ length: trainingDataValidation.csv[0].length }, (_, index) => `${index}`)
     },
     getModelDataValidation (): ModelData | string {
       const model = this.data.model
@@ -69,6 +71,16 @@ export const useBuilderStore = defineStore('builder', {
 
         if (!isValidTrainingDataCsv(trainingData)) {
           return 'Missing csv data.'
+        }
+
+        if (trainingData.columnsHaveTitles) {
+          if (!validateColumnTitleRow(trainingData.csv[0])) {
+            return 'Column titles must be unique.'
+          }
+        }
+
+        if (!validateRowsHaveSameColumnNumber(trainingData.csv)) {
+          return 'Invalid csv. Rows must have the same number of columns.'
         }
 
         return trainingData

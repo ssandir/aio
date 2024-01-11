@@ -1,5 +1,6 @@
 import { TrainingDataTypes, TrainingData, DeepPartial, ModelValidatonData, ModelValidatonDataTypes, GoogleSpreadsheetsModelValidatonData, GoogleSpreadsheetsTrainingData, TargetColumnData } from '../types'
 import { trainingDataTypes, modelValidationDataTypes } from '../constants'
+import TargetColumnClosedVue from '@/views/builder/components/TargetColumnClosed.vue'
 
 export function isValidTrainingDataType (trainingData: DeepPartial<TrainingData> | undefined): trainingData is (DeepPartial<TrainingData> & { type: TrainingDataTypes }) {
   return !(trainingData == null) && trainingDataTypes.includes(trainingData.type as TrainingDataTypes)
@@ -53,4 +54,12 @@ export function isValidModelValidationDataCsv (modelValidationData: DeepPartial<
 
 export function isValidTargetColumnDataName (targetColumnData: DeepPartial<TargetColumnData> | undefined): targetColumnData is (DeepPartial<TargetColumnData> & { name: string }) {
   return typeof targetColumnData?.name === 'string'
+}
+
+export function validateColumnTitleRow (columnTitles: string[]): boolean {
+  return new Set(columnTitles).size === columnTitles.length
+}
+
+export function validateRowsHaveSameColumnNumber (csv: string[][]): boolean {
+  return csv.every(row => row.length === csv[0].length)
 }
