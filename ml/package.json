@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc",
     "lint": "eslint . --ignore-path .gitignore --max-warnings 0",
-    "lint-fix": "eslint . --fix --ignore-path .gitignore --max-warnings 0"
+    "lint-fix": "eslint . --fix --ignore-path .gitignore --max-warnings 0",
+    "test": "jest"
   },
   "dependencies": {
     "ml-matrix": "^6.11.0"

@@ -16,7 +16,8 @@
     "types": [
       "node",
       "vuetify",
-      "vite/client"
+      "vite/client",
+      "jest"
     ],
     "paths": {
       "@/*": ["src/*"]

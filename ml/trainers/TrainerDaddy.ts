@@ -1,14 +1,16 @@
 import { BuilderData } from '@root/src/store/builder/types'
 
 export abstract class TrainerDaddy {
-  targetColumn: number[]
-  featureColumns: number[][]
-  columnTitles: string[]
-  columnsHaveTitles: boolean
-  columnStringValueExpansionList: Record<string, string[]> = {}
+  public targetColumn: number[]
+  public featureColumns: number[][]
+  public columnTitles: string[]
+  public columnsHaveTitles: boolean
+  public targetColumnTitle: string
+  public columnStringValueExpansionList: Record<string, string[]> = {}
 
   constructor (protected builderData: BuilderData) {
     this.columnsHaveTitles = this.builderData.trainingData.columnsHaveTitles
+    this.targetColumnTitle = this.builderData.targetColumn.name
 
     let columnTitles: string[]
     let csv: string[][]
@@ -20,6 +22,10 @@ export abstract class TrainerDaddy {
     }
 
     this.columnTitles = columnTitles // used for potentially reordering columns and selecting target column
+
+    if(!this.columnTitles.includes(this.targetColumnTitle)) {
+      throw new Error('Target column not found.')
+    }
 
     const featureColumns: number[][] = csv.map(_ => [])
     const targetColumn: number[] = []
@@ -55,7 +61,7 @@ export abstract class TrainerDaddy {
         for (let NRow = 0; NRow < csv.length; ++NRow) {
           const value = parseFloat(csv[NRow][NColumn])
           if (Number.isNaN(value)) {
-            throw new Error('Non numeric value for target column.')
+            throw new Error('Non-numeric value found in numeric column.')
           }
           featureColumns[NRow].push(value)
         }

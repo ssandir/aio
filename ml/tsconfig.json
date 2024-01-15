@@ -15,7 +15,8 @@
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
     "types": [
-      "node"
+      "node",
+      "jest"
     ],
     "outDir": "./dist",
     "paths": {
@@ -26,6 +27,6 @@
     "**/*.ts",
     "**/*.d.ts",
     "**/*.tsx",
-    "../src/store/builder/types.ts"
+    "../src/store/builder/types.d.ts"
   ]
 }
