@@ -58,7 +58,7 @@
 import { useBuilderStore } from '@/store/builder/builder'
 import { computed, ref, watch, Ref } from 'vue'
 import { getGoogleSpreadsheetIdFromUrl, isValidGoogleSpreadsheetUrl } from '@/store/builder/trainingData/helpers'
-import { PartialGoogleSpeadsheetData } from '@/store/builder/types'
+import { PartialGoogleSpeadsheetData } from '@shared/types'
 
 const props = defineProps<{
     dataAttribute: 'trainingData' | 'modelValidationData'

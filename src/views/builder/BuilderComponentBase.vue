@@ -25,7 +25,7 @@ import ModelValidationDataOpen from './components/ModelValidationDataOpen.vue'
 import ModelValidationDataClosed from './components/ModelValidationDataClosed.vue'
 import TargetColumnClosed from './components/TargetColumnClosed.vue'
 import TargetColumnOpen from './components/TargetColumnOpen.vue'
-import { BuilderComponents } from '@/store/builder/types'
+import { BuilderComponents } from '@shared/types'
 import { useBuilderStore } from '@/store/builder/builder'
 import { computed } from 'vue'
 

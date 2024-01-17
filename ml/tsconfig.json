@@ -20,13 +20,16 @@
     ],
     "outDir": "./dist",
     "paths": {
-      "@root/*": ["../*"]
+      "@shared/*": ["../shared/*"],
+      "@ml-shared/*": ["./shared/*"],
     }
   },
   "include": [
     "**/*.ts",
     "**/*.d.ts",
     "**/*.tsx",
-    "../src/store/builder/types.d.ts"
+    "../shared/**/*.ts",
+    "../shared/**/*.d.ts",
+    "../shared/**/*.tsx",  
   ]
 }

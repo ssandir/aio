@@ -4,13 +4,14 @@ module.exports = {
   moduleFileExtensions: [
     'js',
     'ts',
-    'json',
+    'json'
   ],
   transform: {
-    '^.+\\.ts$': 'ts-jest',
+    '^.+\\.ts$': 'ts-jest'
   },
   moduleNameMapper: {
-    '^@root/(.*)$': '../$1',
+    '^@shared/(.*)$': '../shared/$1',
+    '^@ml-shared/(.*)$': '<rootDir>/shared/$1'
   },
-  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$',
-};
+  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$'
+}

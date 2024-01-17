@@ -21,10 +21,13 @@ export type NeuralNetworModelData = ModelDataBase<'Neural Network'>
 export type ModelData = RegressionModelData | NeuralNetworModelData
 export type PartialModelData = DeepPartial<ModelData>
 
-interface GoogleSpreadsheetData {
+export interface CsvData {
+  csv: string[][]
+}
+
+interface GoogleSpreadsheetData extends CsvData {
   url: string
   sheetName: string
-  csv: string[][]
 }
 export type PartialGoogleSpeadsheetData = DeepPartial<GoogleSpreadsheetData>
 

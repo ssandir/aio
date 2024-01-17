@@ -1,6 +1,5 @@
-import { TrainingDataTypes, TrainingData, DeepPartial, ModelValidatonData, ModelValidatonDataTypes, GoogleSpreadsheetsModelValidatonData, GoogleSpreadsheetsTrainingData, TargetColumnData } from '../types'
+import type { TrainingDataTypes, TrainingData, DeepPartial, ModelValidatonData, ModelValidatonDataTypes, GoogleSpreadsheetsModelValidatonData, GoogleSpreadsheetsTrainingData, TargetColumnData } from '@shared/types'
 import { trainingDataTypes, modelValidationDataTypes } from '../constants'
-import TargetColumnClosedVue from '@/views/builder/components/TargetColumnClosed.vue'
 
 export function isValidTrainingDataType (trainingData: DeepPartial<TrainingData> | undefined): trainingData is (DeepPartial<TrainingData> & { type: TrainingDataTypes }) {
   return !(trainingData == null) && trainingDataTypes.includes(trainingData.type as TrainingDataTypes)

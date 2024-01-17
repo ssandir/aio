@@ -20,7 +20,8 @@
       "jest"
     ],
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@shared/*": ["shared/*"],
     }
   },
   "include": [
@@ -28,6 +29,9 @@
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "vite.config.ts"
+    "vite.config.ts", 
+    "shared/**/*.ts",
+    "shared/**/*.d.ts",
+    "shared/**/*.tsx",  
   ]
 }

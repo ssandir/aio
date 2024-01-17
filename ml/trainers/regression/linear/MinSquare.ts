@@ -1,10 +1,6 @@
 import { TrainerDaddy } from '../../TrainerDaddy'
 
-class RegressionLinearMinSquare extends TrainerDaddy {
-  normalizeData (): void {
-
-  }
-
+export class RegressionLinearMinSquare extends TrainerDaddy {
   trainModel (): void {
 
   }

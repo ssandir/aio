@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { BuilderComponents, State, ModelData, TrainingData, PartialTrainingData, PartialModelData, BuilderComponentsToPartialData, PartialModelValidatonData, ModelValidatonData, PartialTargetColumnData, TargetColumnData } from './types'
+import type { BuilderComponents, State, ModelData, TrainingData, PartialTrainingData, PartialModelData, BuilderComponentsToPartialData, PartialModelValidatonData, ModelValidatonData, PartialTargetColumnData, TargetColumnData } from '@shared/types'
 import { isValidModelType } from './model/helpers'
 import {
   isValidTrainingDataType,
@@ -56,10 +56,6 @@ export const useBuilderStore = defineStore('builder', {
         return 'Select a data source type.'
       }
 
-      if (!isValidTrainingDataColumnsHaveTitles(trainingData)) {
-        return 'Missing columnsHaveTitles data.'
-      }
-
       if (trainingData.type === 'Google Spreadsheet') {
         if (!isValidTrainingDataGoogleSpreadsheetUrl(trainingData)) {
           return 'Enter a valid Google Spreadsheets URL'
@@ -68,25 +64,29 @@ export const useBuilderStore = defineStore('builder', {
         if (!isValidTrainingDataSheetName(trainingData)) {
           return 'Choose valid sheet name.'
         }
-
-        if (!isValidTrainingDataCsv(trainingData)) {
-          return 'Missing csv data.'
-        }
-
-        if (trainingData.columnsHaveTitles) {
-          if (!validateColumnTitleRow(trainingData.csv[0])) {
-            return 'Column titles must be unique.'
-          }
-        }
-
-        if (!validateRowsHaveSameColumnNumber(trainingData.csv)) {
-          return 'Invalid csv. Rows must have the same number of columns.'
-        }
-
-        return trainingData
+      } else {
+        throw new Error('unhandled type')
       }
 
-      throw new Error('unhandled type')
+      if (!isValidTrainingDataCsv(trainingData)) {
+        return 'Missing csv data.'
+      }
+
+      if (!isValidTrainingDataColumnsHaveTitles(trainingData)) {
+        return 'Missing columnsHaveTitles data.'
+      }
+
+      if (trainingData.columnsHaveTitles) {
+        if (!validateColumnTitleRow(trainingData.csv[0])) {
+          return 'Column titles must be unique.'
+        }
+      }
+
+      if (!validateRowsHaveSameColumnNumber(trainingData.csv)) {
+        return 'Invalid csv. Rows must have the same number of columns.'
+      }
+
+      return trainingData
     },
     getModelValidationDataValidation (): ModelValidatonData | string {
       const modelValidationData = this.data.modelValidationData

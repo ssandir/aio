@@ -1,4 +1,4 @@
-import { Models, ModelData, DeepPartial } from '../types'
+import type { Models, ModelData, DeepPartial } from '@shared/types'
 import { models } from '../constants'
 
 export function isValidModelType (model: DeepPartial<ModelData> | undefined): model is (DeepPartial<ModelData> & { type: Models }) {

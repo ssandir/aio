@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PartialModelData, PartialTrainingData, PartialModelValidatonData, PartialTargetColumnData } from '@/store/builder/types'
+import { PartialModelData, PartialTrainingData, PartialModelValidatonData, PartialTargetColumnData } from '@shared/types'
 
 defineProps<{
     data: PartialModelData | PartialTrainingData | PartialModelValidatonData | PartialTargetColumnData

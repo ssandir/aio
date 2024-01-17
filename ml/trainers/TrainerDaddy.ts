@@ -1,4 +1,5 @@
-import { BuilderData } from '@root/src/store/builder/types'
+import { BuilderData } from '@shared/types'
+import { extractColumnTitles } from '@ml-shared/csvDataNormalizaton'
 
 export abstract class TrainerDaddy {
   public targetColumn: number[]
@@ -12,34 +13,28 @@ export abstract class TrainerDaddy {
     this.columnsHaveTitles = this.builderData.trainingData.columnsHaveTitles
     this.targetColumnTitle = this.builderData.targetColumn.name
 
-    let columnTitles: string[]
-    let csv: string[][]
-    if (this.columnsHaveTitles) {
-      [columnTitles, ...csv] = this.builderData.trainingData.csv
-    } else {
-      columnTitles = this.builderData.trainingData.csv[0].map((_, i) => `${i}`)
-      csv = this.builderData.trainingData.csv
+    const { columnTitles, csv } = extractColumnTitles(this.builderData.trainingData.csv, this.columnsHaveTitles)
+
+    // separate target column
+    const targetColumnIndex = columnTitles.indexOf(this.targetColumnTitle)
+    if (targetColumnIndex < 0) {
+      throw new Error(`Target column "${this.targetColumnTitle}" not found.`)
     }
+    this.targetColumn = csv.map(row => {
+      const value = parseFloat(row.splice(targetColumnIndex, 1)[0])
+      if (Number.isNaN(value)) {
+        throw new Error(`Non numeric value "${value}" found in target column.`)
+      }
+      return value
+    })
+    columnTitles.splice(targetColumnIndex, 1)
+    this.columnTitles = columnTitles // used for potentially reordering columns
 
-    this.columnTitles = columnTitles // used for potentially reordering columns and selecting target column
-
-    if(!this.columnTitles.includes(this.targetColumnTitle)) {
-      throw new Error('Target column not found.')
-    }
-
+    // tbd -> separate the columnStringValueExpansionList generation and then the normalization is the same
+    // feature columns
     const featureColumns: number[][] = csv.map(_ => [])
-    const targetColumn: number[] = []
-    const targetColumnIndex = columnTitles.indexOf(this.builderData.targetColumn.name)
     for (let NColumn = 0; NColumn < csv[0].length; ++NColumn) {
-      if (targetColumnIndex === NColumn) {
-        for (let NRow = 0; NRow < csv.length; ++NRow) {
-          const value = parseFloat(csv[NRow][NColumn])
-          if (Number.isNaN(value)) {
-            throw new Error('Non numeric value for target column.')
-          }
-          targetColumn.push(value)
-        }
-      } else if (Number.isNaN(parseFloat(csv[0][NColumn]))) {
+      if (Number.isNaN(parseFloat(csv[0][NColumn]))) {
         const columnName = this.columnTitles[NColumn]
         this.columnStringValueExpansionList[columnName] = []
         for (let NRow = 0; NRow < csv.length; ++NRow) {
@@ -49,7 +44,7 @@ export abstract class TrainerDaddy {
         }
 
         if (this.columnStringValueExpansionList[columnName].length > Math.log2(csv.length) + 1) {
-          throw new Error('Too many unique values in non numeric column.')
+          throw new Error(`Too many unique values in non numeric column "${columnName}".`)
         }
 
         for (let NRow = 0; NRow < csv.length; ++NRow) {
@@ -61,7 +56,7 @@ export abstract class TrainerDaddy {
         for (let NRow = 0; NRow < csv.length; ++NRow) {
           const value = parseFloat(csv[NRow][NColumn])
           if (Number.isNaN(value)) {
-            throw new Error('Non-numeric value found in numeric column.')
+            throw new Error(`Non-numeric value "${value}" found in numeric column "${this.columnTitles[NColumn]}".`)
           }
           featureColumns[NRow].push(value)
         }
@@ -69,7 +64,6 @@ export abstract class TrainerDaddy {
     }
 
     this.featureColumns = featureColumns
-    this.targetColumn = targetColumn
   }
 
   abstract trainModel (): void
