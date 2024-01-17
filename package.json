@@ -6,8 +6,8 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "lint": "eslint . --ignore-path .gitignore --max-warnings 0",
-    "lint-fix": "eslint . --fix --ignore-path .gitignore --max-warnings 0",
+    "lint": "eslint . --ignore-path .eslintignore --max-warnings 0",
+    "lint-fix": "eslint . --fix --ignore-path .eslintignore --max-warnings 0",
     "test": "jest"
   },
   "dependencies": {
