@@ -12,6 +12,7 @@ import {
   isValidModelValidationDataSheetName,
   isValidModelValidationDataCsv,
   isValidTargetColumnDataName,
+  isValidModelValidationDataRowNumber,
   validateColumnTitleRow,
   validateRowsHaveSameColumnNumber
 } from './trainingData/helpers'
@@ -106,6 +107,12 @@ export const useBuilderStore = defineStore('builder', {
 
         if (!isValidModelValidationDataCsv(modelValidationData)) {
           return 'Missing columnsHaveTitles data.'
+        }
+      }
+
+      if (modelValidationData.type === 'Training data') {
+        if (!isValidModelValidationDataRowNumber(modelValidationData)) {
+          return 'Missing model validation training data row number.'
         }
       }
 

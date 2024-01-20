@@ -1,4 +1,4 @@
-import type { TrainingDataTypes, TrainingData, DeepPartial, ModelValidatonData, ModelValidatonDataTypes, GoogleSpreadsheetsModelValidatonData, GoogleSpreadsheetsTrainingData, TargetColumnData } from '@shared/types'
+import type { TrainingDataTypes, TrainingData, DeepPartial, ModelValidatonData, ModelValidatonDataTypes, GoogleSpreadsheetsModelValidatonData, GoogleSpreadsheetsTrainingData, TargetColumnData, TrainingDataModelValidatonData } from '@shared/types'
 import { trainingDataTypes, modelValidationDataTypes } from '../constants'
 
 export function isValidTrainingDataType (trainingData: DeepPartial<TrainingData> | undefined): trainingData is (DeepPartial<TrainingData> & { type: TrainingDataTypes }) {
@@ -49,6 +49,10 @@ export function isValidModelValidationDataSheetName (modelValidationData: DeepPa
 
 export function isValidModelValidationDataCsv (modelValidationData: DeepPartial<GoogleSpreadsheetsModelValidatonData> | undefined): modelValidationData is (DeepPartial<GoogleSpreadsheetsModelValidatonData> & { csv: string[][] }) {
   return Array.isArray(modelValidationData?.csv) && modelValidationData.csv.every(row => Array.isArray(row))
+}
+
+export function isValidModelValidationDataRowNumber (modelValidationData: DeepPartial<TrainingDataModelValidatonData> | undefined): modelValidationData is (DeepPartial<TrainingDataModelValidatonData> & { rowNumber: number }) {
+  return typeof modelValidationData?.rowNumber === 'number'
 }
 
 export function isValidTargetColumnDataName (targetColumnData: DeepPartial<TargetColumnData> | undefined): targetColumnData is (DeepPartial<TargetColumnData> & { name: string }) {

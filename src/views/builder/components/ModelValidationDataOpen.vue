@@ -10,7 +10,7 @@
         class="text-center"
       >
         <v-card-title class="text-h2 text-secondary">
-          Training Data
+          Model validation data
         </v-card-title>
       </v-col>
     </v-row>
@@ -33,7 +33,7 @@
             value="Training data"
             class="text-secondary"
           >
-            Random 1/3 of training data
+            Subset of training data
           </v-btn>
 
           <v-btn
@@ -49,6 +49,10 @@
     <google-spreadsheets
       v-if="dataType === 'Google Spreadsheet'"
       data-attribute="modelValidationData"
+    />
+
+    <validation-from-training-data
+      v-if="dataType === 'Training data'"
     />
 
     <!-- Done button -->
@@ -88,7 +92,8 @@
 <script lang="ts" setup>
 import { useBuilderStore } from '@/store/builder/builder'
 import { computed, ref, watch } from 'vue'
-import GoogleSpreadsheets from './shared/GoogleSpreadsheets.vue'
+import GoogleSpreadsheets from './dataInput/GoogleSpreadsheets.vue'
+import ValidationFromTrainingData from './dataInput/ValidationFromTrainingData.vue'
 
 const builderStore = useBuilderStore()
 

@@ -1,6 +1,6 @@
-import { BuilderData } from '@shared/types'
+import type { BuilderData, CsvData } from '@shared/types'
 import { extractColumnTitles } from '@ml-shared/csvDataNormalizaton'
-
+ 
 export abstract class TrainerDaddy {
   public targetColumn: number[]
   public featureColumns: number[][]
@@ -8,6 +8,7 @@ export abstract class TrainerDaddy {
   public columnsHaveTitles: boolean
   public targetColumnTitle: string
   public columnStringValueExpansionList: Record<string, string[]> = {}
+  public validationData: CsvData 
 
   constructor (protected builderData: BuilderData) {
     this.columnsHaveTitles = this.builderData.trainingData.columnsHaveTitles
@@ -29,6 +30,10 @@ export abstract class TrainerDaddy {
     })
     columnTitles.splice(targetColumnIndex, 1)
     this.columnTitles = columnTitles // used for potentially reordering columns
+
+    if (this.builderData.modelValidationData.type === 'Training data') {
+      
+    }
 
     // tbd -> separate the columnStringValueExpansionList generation and then the normalization is the same
     // feature columns
@@ -66,7 +71,7 @@ export abstract class TrainerDaddy {
     this.featureColumns = featureColumns
   }
 
-  abstract trainModel (): void
+  protected abstract trainModel (): void
 
   train (): void {
     this.trainModel()

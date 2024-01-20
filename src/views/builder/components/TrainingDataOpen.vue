@@ -73,7 +73,7 @@
 <script lang="ts" setup>
 import { useBuilderStore } from '@/store/builder/builder'
 import { Ref, computed, ref, watch } from 'vue'
-import GoogleSpreadsheets from './shared/GoogleSpreadsheets.vue'
+import GoogleSpreadsheets from './dataInput/GoogleSpreadsheets.vue'
 
 const builderStore = useBuilderStore()
 

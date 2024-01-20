@@ -45,7 +45,10 @@ interface ModelValidatonDataBase<T extends ModelValidatonDataTypes> {
   type: T
 }
 export type GoogleSpreadsheetsModelValidatonData = ModelValidatonDataBase<'Google Spreadsheet'> & GoogleSpreadsheetData
-export type TrainingDataModelValidatonData = ModelValidatonDataBase<'Training data'>
+export type TrainingDataModelValidatonData = ModelValidatonDataBase<'Training data'> & {
+  rowNumber: number
+}
+export type PartialTrainingDataModelValidatonData = DeepPartial<TrainingDataModelValidatonData>
 export type ModelValidatonData = GoogleSpreadsheetsModelValidatonData | TrainingDataModelValidatonData
 export type PartialModelValidatonData = DeepPartial<ModelValidatonData>
 
