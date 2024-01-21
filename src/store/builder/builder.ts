@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { BuilderComponents, State, ModelData, TrainingData, PartialTrainingData, PartialModelData, BuilderComponentsToPartialData, PartialModelValidatonData, ModelValidatonData, PartialTargetColumnData, TargetColumnData } from '@shared/types'
+import type { BuilderComponents, BuilderScreens, State, ModelData, TrainingData, PartialTrainingData, PartialModelData, BuilderComponentsToPartialData, PartialModelValidatonData, ModelValidatonData, PartialTargetColumnData, TargetColumnData, BuilderData } from '@shared/types'
 import { isValidModelType } from './model/helpers'
 import {
   isValidTrainingDataType,
@@ -126,10 +126,28 @@ export const useBuilderStore = defineStore('builder', {
       }
 
       return targetColumnData
+    },
+    getBuilderDataValidation (): BuilderData | string {
+      const model = this.getModelDataValidation
+      const trainingData = this.getTrainingDataValidation
+      const modelValidationData = this.getModelValidationDataValidation
+      const targetColumn = this.getTargetColumnDataValidation
+
+      if (typeof model === 'string') return model
+      if (typeof trainingData === 'string') return trainingData
+      if (typeof modelValidationData === 'string') return modelValidationData
+      if (typeof targetColumn === 'string') return targetColumn
+
+      return {
+        model,
+        trainingData,
+        modelValidationData,
+        targetColumn
+      }
     }
   },
   actions: {
-    setCurrentlyOpen (nextOpen: BuilderComponents) {
+    setCurrentlyOpen (nextOpen: BuilderScreens) {
       this.currentlyOpen = nextOpen
     },
     addBuilderComponentIfNecessary (builderComponent: BuilderComponents) {
@@ -161,7 +179,7 @@ export const useBuilderStore = defineStore('builder', {
           this.setCurrentlyOpen('targetColumn')
           break
         case 'targetColumn':
-          this.setCurrentlyOpen('model')
+          this.setCurrentlyOpen('trainingScreen')
           break
       }
     },
@@ -203,6 +221,9 @@ export const useBuilderStore = defineStore('builder', {
         ...(replace ? {} : this.data.targetColumn),
         ...newData
       }
+    },
+    trainModel () {
+
     }
   }
 })

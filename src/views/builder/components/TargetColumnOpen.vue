@@ -63,7 +63,7 @@
                 :disabled="isDoneButtonDisabled()"
                 @click.stop="handleDoneClick"
               >
-                Done
+                Train
               </v-btn>
             </div>
           </template>
@@ -80,7 +80,7 @@ import { computed, ref, watch } from 'vue'
 
 const builderStore = useBuilderStore()
 
-const dataValidation = computed(() => builderStore.getTargetColumnDataValidation)
+const dataValidation = computed(() => builderStore.getBuilderDataValidation)
 const csvColumnNames = computed(() => builderStore.getCsvColumnNames)
 if (!Array.isArray(csvColumnNames.value) || !(csvColumnNames.value as (string | undefined)[]).includes(builderStore.data.targetColumn?.name)) {
   builderStore.addTargetColumnDataAttributeValue({}, true)

@@ -13,7 +13,9 @@ module.exports = {
     '^.+\\.ts$': 'ts-jest'
   },
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1'
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^@shared/(.*)$': '<rootDir>/shared/$1',
+    '^@ml/(.*)$': '<rootDir>/ml/$1'
   },
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$'
   // setupFiles: ['<rootDir>/tests/unit/setup.ts']

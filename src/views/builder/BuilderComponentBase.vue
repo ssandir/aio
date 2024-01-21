@@ -12,6 +12,7 @@
       <model-validation-data-closed v-if="componentName === 'modelValidationData' && !isOpen" />
       <target-column-open v-if="componentName === 'targetColumn' && isOpen" />
       <target-column-closed v-if="componentName === 'targetColumn' && !isOpen" />
+      <training-screen v-if="componentName === 'trainingScreen'" />
     </div>
   </v-sheet>
 </template>
@@ -25,12 +26,13 @@ import ModelValidationDataOpen from './components/ModelValidationDataOpen.vue'
 import ModelValidationDataClosed from './components/ModelValidationDataClosed.vue'
 import TargetColumnClosed from './components/TargetColumnClosed.vue'
 import TargetColumnOpen from './components/TargetColumnOpen.vue'
-import { BuilderComponents } from '@shared/types'
+import TrainingScreen from './components/TrainingScreen.vue'
+import { BuilderScreens } from '@shared/types'
 import { useBuilderStore } from '@/store/builder/builder'
 import { computed } from 'vue'
 
 defineProps<{
-    componentName: BuilderComponents
+    componentName: BuilderScreens
     isOpen: boolean
     index: number
 }>()
