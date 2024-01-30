@@ -17,7 +17,8 @@ import { computed } from 'vue'
 import { BuilderScreens } from '@shared/types'
 const builderStore = useBuilderStore()
 
-const components = computed(() => [...builderStore.getActiveComponents, ...(builderStore.currentlyOpen === 'trainingScreen' ? ['trainingScreen'] : [])] as BuilderScreens[])
+// model validation is the last step, this component is only visible if opened
+const components = computed(() => [...builderStore.getActiveComponents, ...(builderStore.currentlyOpen === 'modelValidation' ? ['modelValidation'] : [])] as BuilderScreens[])
 </script>
 
 <style>

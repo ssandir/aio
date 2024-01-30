@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import type { BuilderComponents, BuilderScreens, State, ModelData, TrainingData, PartialTrainingData, PartialModelData, BuilderComponentsToPartialData, PartialModelValidatonData, ModelValidatonData, PartialTargetColumnData, TargetColumnData, BuilderData } from '@shared/types'
-import { isValidModelType } from './model/helpers'
 import {
+  isValidModelType,
   isValidTrainingDataType,
   isValidTrainingDataGoogleSpreadsheetUrl,
   isValidTrainingDataSheetName,
@@ -15,7 +15,10 @@ import {
   isValidModelValidationDataRowNumber,
   validateColumnTitleRow,
   validateRowsHaveSameColumnNumber
-} from './trainingData/helpers'
+} from './data/helpers'
+import router from '@/router'
+import { modelTypeToTrainer } from './modelTypeToTrainer'
+
 
 export const useBuilderStore = defineStore('builder', {
   state: (): State => ({
@@ -178,8 +181,7 @@ export const useBuilderStore = defineStore('builder', {
           this.addBuilderComponentIfNecessary('targetColumn')
           this.setCurrentlyOpen('targetColumn')
           break
-        case 'targetColumn':
-          this.setCurrentlyOpen('trainingScreen')
+        default:
           break
       }
     },
@@ -222,8 +224,19 @@ export const useBuilderStore = defineStore('builder', {
         ...newData
       }
     },
-    trainModel () {
-
+    async trainModel (data: BuilderData) {
+      this.setCurrentlyOpen('modelValidation')
+      await new Promise(resolve => setTimeout(resolve, 1000)) // visual testing purposes
+      const TrainerClass = modelTypeToTrainer[data.model.type]
+      if (TrainerClass === null) {
+        throw new Error(`Training for model type ${data.model.type} not yet supported.`)
+      }
+      const trainer = new TrainerClass(data)
+      await trainer.train()
+      this.trainedModel = 'yayaya'
+    },
+    async goToModelUI () {
+      await router.push({ name: 'model', params: { hash: 'testHash' } })
     }
   }
 })

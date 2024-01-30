@@ -96,8 +96,9 @@ const isDoneButtonDisabled = () => {
 }
 
 const handleDoneClick = () => {
-  // Handle the click, for example, store the URL or perform other actions
-  builderStore.nextCurrentlyOpen()
+  if (typeof dataValidation.value !== 'string') {
+    builderStore.trainModel(dataValidation.value)
+  }
 }
 </script>
 

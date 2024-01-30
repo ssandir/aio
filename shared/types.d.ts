@@ -1,9 +1,10 @@
 export type BuilderComponents = 'model' | 'trainingData' | 'modelValidationData' | 'targetColumn'
-export type BuilderScreens = BuilderComponents | 'trainingScreen'
+export type BuilderScreens = BuilderComponents | 'modelValidation'
 
 export interface State {
   currentlyOpen: BuilderScreens
   data: DeepPartial<BuilderData>
+  trainedModel?: unknown
 }
 
 export interface BuilderData {

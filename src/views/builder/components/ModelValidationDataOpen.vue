@@ -109,7 +109,6 @@ const isDoneButtonDisabled = () => {
 }
 
 const handleDoneClick = () => {
-  // Handle the click, for example, store the URL or perform other actions
   builderStore.nextCurrentlyOpen()
 }
 </script>

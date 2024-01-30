@@ -1,21 +1,17 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
+import ModelUi from '@/views/modelUI/ModelUI.vue'
 
 const routes = [
   {
     path: '/',
-    component: () => Home
-    /* children: [
-      {
-        path: '',
-        name: 'Home',
-        // route level code-splitting
-        // this generates a separate chunk (Home-[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import('@/views/Home.vue'),
-      },
-    ], */
+    component: Home
+  },
+  {
+    path: '/model/:hash', // Dynamic segment :hash
+    name: 'model', // Optional: You can give the route a name
+    component: ModelUi // Replace with the actual component for the model view
   }
 ]
 

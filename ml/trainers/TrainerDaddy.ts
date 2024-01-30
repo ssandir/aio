@@ -8,7 +8,6 @@ export abstract class TrainerDaddy {
   public columnsHaveTitles: boolean
   public targetColumnTitle: string
   public columnStringValueExpansionList: Record<string, string[]> = {}
-  public validationData: CsvData 
 
   constructor (protected builderData: BuilderData) {
     this.columnsHaveTitles = this.builderData.trainingData.columnsHaveTitles

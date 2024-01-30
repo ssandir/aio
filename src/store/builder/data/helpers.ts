@@ -1,5 +1,9 @@
-import type { TrainingDataTypes, TrainingData, DeepPartial, ModelValidatonData, ModelValidatonDataTypes, GoogleSpreadsheetsModelValidatonData, GoogleSpreadsheetsTrainingData, TargetColumnData, TrainingDataModelValidatonData } from '@shared/types'
-import { trainingDataTypes, modelValidationDataTypes } from '../constants'
+import type { Models, ModelData, TrainingDataTypes, TrainingData, DeepPartial, ModelValidatonData, ModelValidatonDataTypes, GoogleSpreadsheetsModelValidatonData, GoogleSpreadsheetsTrainingData, TargetColumnData, TrainingDataModelValidatonData } from '@shared/types'
+import { models, trainingDataTypes, modelValidationDataTypes } from '../constants'
+
+export function isValidModelType (model: DeepPartial<ModelData> | undefined): model is (DeepPartial<ModelData> & { type: Models }) {
+  return !(model == null) && models.includes(model.type as Models)
+}
 
 export function isValidTrainingDataType (trainingData: DeepPartial<TrainingData> | undefined): trainingData is (DeepPartial<TrainingData> & { type: TrainingDataTypes }) {
   return !(trainingData == null) && trainingDataTypes.includes(trainingData.type as TrainingDataTypes)
