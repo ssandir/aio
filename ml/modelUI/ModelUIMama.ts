@@ -6,7 +6,6 @@ export abstract class ModelUIMama {
     protected columnsHaveTitles: boolean,
     protected columnTitles: string[],
     protected columnStringValueExpansionList: Record<string, string[]>
-
   ) {
 
   }

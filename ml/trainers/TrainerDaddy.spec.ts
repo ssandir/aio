@@ -1,9 +1,15 @@
-// tests/unit/HelloWorld.spec.ts
+import { ModelUIMama } from '../modelUI/ModelUIMama'
 import { TrainerDaddy } from './TrainerDaddy'
 import { BuilderData } from '@shared/types'
 
+jest.mock('../modelUI/ModelUIMama')
+
+class TestModelUIMama extends ModelUIMama {}
+
 class TestTrainerDaddy extends TrainerDaddy {
-  trainModel (): void {}
+  trainModel (): ModelUIMama {
+    return new TestModelUIMama(false, [], {})
+  }
 }
 
 describe('TrainerDaddy', () => {
@@ -22,7 +28,7 @@ describe('TrainerDaddy', () => {
           ['1.5555', 'test', '124.123', '2']
         ]
       },
-      modelValidationData: { type: 'Training data' },
+      modelValidationData: { type: 'Training data', rowNumber: 1 },
       targetColumn: { name: '2' }
     }
 

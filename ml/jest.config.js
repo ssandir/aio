@@ -13,5 +13,9 @@ module.exports = {
     '^@shared/(.*)$': '../shared/$1',
     '^@ml-shared/(.*)$': '<rootDir>/shared/$1'
   },
-  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$'
+  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$',
+  transformIgnorePatterns: [
+    '/node_modules/',
+    './dist/'
+  ]
 }

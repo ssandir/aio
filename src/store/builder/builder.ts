@@ -19,7 +19,6 @@ import {
 import router from '@/router'
 import { modelTypeToTrainer } from './modelTypeToTrainer'
 
-
 export const useBuilderStore = defineStore('builder', {
   state: (): State => ({
     currentlyOpen: 'model',
