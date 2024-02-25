@@ -1,14 +1,12 @@
 import { CsvData } from '@shared/types'
-import { extractColumnTitles } from '@ml-shared/csvDataNormalizaton'
+import { extractColumnTitles } from '../shared/csvDataNormalizaton'
 
 export abstract class ModelUIMama {
   constructor (
     protected columnsHaveTitles: boolean,
     protected columnTitles: string[],
     protected columnStringValueExpansionList: Record<string, string[]>
-  ) {
-
-  }
+  ) {}
 
   protected normalizeData (csvData: CsvData): number[][] {
     if (csvData.csv[0].length !== this.columnTitles.length) {

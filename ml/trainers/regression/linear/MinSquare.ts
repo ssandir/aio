@@ -1,5 +1,5 @@
 import { TrainerDaddy } from '../../TrainerDaddy'
-import { RegressionLinearMinSquare as RegressionLinearMinSquareModel } from 'modelUI/regression/linear/MinSquare'
+import { RegressionLinearMinSquare as RegressionLinearMinSquareModel } from '../../../modelUI/regression/linear/MinSquare'
 import { Matrix, solve } from 'ml-matrix'
 
 export class RegressionLinearMinSquare extends TrainerDaddy {

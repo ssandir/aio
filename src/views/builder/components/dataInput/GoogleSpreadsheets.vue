@@ -57,7 +57,7 @@
 <script lang="ts" setup>
 import { useBuilderStore } from '@/store/builder/builder'
 import { computed, ref, watch, Ref } from 'vue'
-import { getGoogleSpreadsheetIdFromUrl, isValidGoogleSpreadsheetUrl } from '@/store/builder/trainingData/helpers'
+import { getGoogleSpreadsheetIdFromUrl, isValidGoogleSpreadsheetUrl } from '@/store/builder/data/helpers'
 import { PartialGoogleSpeadsheetData } from '@shared/types'
 
 const props = defineProps<{

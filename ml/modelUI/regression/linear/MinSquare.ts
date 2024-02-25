@@ -1,11 +1,12 @@
 import { ModelUIMama } from '../../ModelUIMama'
+import { Matrix } from 'ml-matrix'
 
 export class RegressionLinearMinSquare extends ModelUIMama {
   constructor (
     columnsHaveTitles: boolean,
     columnTitles: string[],
     columnStringValueExpansionList: Record<string, string[]>,
-    private readonly modelData: number[]
+    public readonly modelData: Matrix // tbd private
   ) {
     super(columnsHaveTitles, columnTitles, columnStringValueExpansionList)
   }

@@ -1,5 +1,5 @@
 import type { BuilderData } from '@shared/types'
-import { extractColumnTitles } from '@ml-shared/csvDataNormalizaton'
+import { extractColumnTitles } from '../shared/csvDataNormalizaton'
 import { ModelUIMama } from 'modelUI/ModelUIMama'
 
 export abstract class TrainerDaddy {
@@ -7,33 +7,47 @@ export abstract class TrainerDaddy {
   public featureColumns: number[][]
   public columnTitles: string[]
   public columnsHaveTitles: boolean
-  public targetColumnTitle: string
   public columnStringValueExpansionList: Record<string, string[]> = {}
+  public validationDataCsv: string[][]
+  public validationTargetColumn: number[]
 
   constructor (protected builderData: BuilderData) {
     this.columnsHaveTitles = this.builderData.trainingData.columnsHaveTitles
-    this.targetColumnTitle = this.builderData.targetColumn.name
 
-    const { columnTitles, csv } = extractColumnTitles(this.builderData.trainingData.csv, this.columnsHaveTitles)
+    const csvRaw = this.builderData.trainingData.csv
+
+    this.validationDataCsv = []
+    if (this.builderData.modelValidationData.type === 'Training data') {
+      const rowNumber = this.builderData.modelValidationData.rowNumber
+
+      if (this.columnsHaveTitles) {
+        this.validationDataCsv.push(csvRaw[0])
+      }
+      for (let i = 0; i < rowNumber; i++) {
+        const rowNumber = csvRaw.length - (this.columnsHaveTitles ? 1 : 0)
+        const randomIndex = Math.floor(Math.random() * rowNumber) + (this.columnsHaveTitles ? 1 : 0)
+        this.validationDataCsv.push(csvRaw.splice(randomIndex, 1)[0])
+      }
+    } else {
+      this.validationDataCsv = this.builderData.modelValidationData.csv
+    }
+
+    // separate column titles
+    const { columnTitles, csv } = extractColumnTitles(csvRaw, this.columnsHaveTitles)
 
     // separate target column
-    const targetColumnIndex = columnTitles.indexOf(this.targetColumnTitle)
+    const targetColumnName = this.builderData.targetColumn.name
+    const targetColumnIndex = columnTitles.indexOf(targetColumnName)
     if (targetColumnIndex < 0) {
-      throw new Error(`Target column "${this.targetColumnTitle}" not found.`)
+      throw new Error(`Target column "${targetColumnName}" not found.`)
     }
-    this.targetColumn = csv.map(row => {
-      const value = parseFloat(row.splice(targetColumnIndex, 1)[0])
-      if (Number.isNaN(value)) {
-        throw new Error(`Non numeric value "${value}" found in target column.`)
-      }
-      return value
-    })
-    columnTitles.splice(targetColumnIndex, 1)
-    this.columnTitles = columnTitles // used for potentially reordering columns
+    this.targetColumn = this.separateTargetColumn(csv, targetColumnIndex)
+    const validationColumnTitlesData = extractColumnTitles(csvRaw, this.columnsHaveTitles)
+    const validationTargetColumnIndex = validationColumnTitlesData.columnTitles.indexOf(targetColumnName)
+    this.validationTargetColumn = this.separateTargetColumn(this.columnsHaveTitles ? this.validationDataCsv.slice(1) : this.validationDataCsv, validationTargetColumnIndex)
 
-    if (this.builderData.modelValidationData.type === 'Training data') {
-      // TBD NEXT
-    }
+    columnTitles.splice(targetColumnIndex, 1)
+    this.columnTitles = columnTitles// used for potentially reordering columns
 
     // tbd -> separate the columnStringValueExpansionList generation and then the normalization is the same
     // feature columns
@@ -75,5 +89,17 @@ export abstract class TrainerDaddy {
 
   train (): ModelUIMama {
     return this.trainModel()
+  }
+
+  private separateTargetColumn (csv: string[][], targetColumnIndex: number): number[] {
+    const targetColumn = csv.map(row => {
+      const value = parseFloat(row.splice(targetColumnIndex, 1)[0])
+      if (Number.isNaN(value)) {
+        throw new Error(`Non numeric value "${value}" found in target column.`)
+      }
+      return value
+    })
+
+    return targetColumn
   }
 }
