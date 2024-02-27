@@ -21,7 +21,7 @@ export function normalizeCsvToFeatureColumns (csv: string[][], columnTitles: str
   const featureColumns: number[][] = csv.map(_ => [])
   for (let NColumn = 0; NColumn < csv[0].length; ++NColumn) {
     const columnName = columnTitles[NColumn]
-    if (columnStringValueExpansionList[columnName]) {
+    if (columnStringValueExpansionList[columnName] !== undefined) {
       for (let NRow = 0; NRow < csv.length; ++NRow) {
         if (!columnStringValueExpansionList[columnName].includes(csv[NRow][NColumn])) {
           throw new Error(`Non-numeric column "${columnName}" contains value "${csv[NRow][NColumn]}" not found in training data or validation data.`)

@@ -35,7 +35,7 @@ export abstract class ModelUIMama {
     return normalizeCsvToFeatureColumns(csv, this.columnTitles, this.columnStringValueExpansionList)
   }
 
-  protected abstract innerInfere(featureColumns: number[][]): number[]
+  protected abstract innerInfere (featureColumns: number[][]): number[]
 
   infere (csvData: CsvData): number[] {
     const featureColumns = this.normalizeData(csvData)

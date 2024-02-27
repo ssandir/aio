@@ -47,7 +47,7 @@ export abstract class TrainerDaddy {
     this.validationTargetColumn = this.separateTargetColumn(this.columnsHaveTitles ? this.validationDataCsv.slice(1) : this.validationDataCsv, validationTargetColumnIndex)
 
     columnTitles.splice(targetColumnIndex, 1)
-    if(this.columnsHaveTitles) this.validationDataCsv[0].splice(targetColumnIndex, 1)
+    if (this.columnsHaveTitles) this.validationDataCsv[0].splice(targetColumnIndex, 1)
     this.columnTitles = columnTitles // used for potentially reordering columns
 
     // generate columnStringValueExpansionList, take string values from training data and validation data
@@ -61,7 +61,7 @@ export abstract class TrainerDaddy {
           }
         }
 
-        for (let NRow = this.columnTitles ? 1 : 0; NRow < this.validationDataCsv.length; ++NRow) {
+        for (let NRow = (this.columnsHaveTitles ? 1 : 0); NRow < this.validationDataCsv.length; ++NRow) {
           if (!this.columnStringValueExpansionList[columnName].includes(this.validationDataCsv[NRow][NColumn])) {
             this.columnStringValueExpansionList[columnName].push(this.validationDataCsv[NRow][NColumn])
           }
@@ -92,7 +92,7 @@ export abstract class TrainerDaddy {
       const entry = row.splice(targetColumnIndex, 1)[0]
       const value = parseFloat(entry)
       if (Number.isNaN(value)) {
-        throw new Error(`Non numeric value "${entry}" found in target column for row ${row}.`)
+        throw new Error(`Non numeric value "${entry}" found in target column for row ${JSON.stringify(row)}.`)
       }
       return value
     })

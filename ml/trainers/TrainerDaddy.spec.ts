@@ -15,7 +15,7 @@ class TestTrainerDaddy extends TrainerDaddy {
 describe('TrainerDaddy', () => {
   describe('Normalizes data with training data', () => {
     beforeEach(() => {
-      jest.spyOn(Math, 'random').mockReturnValue(0);
+      jest.spyOn(Math, 'random').mockReturnValue(0)
     })
 
     const data: BuilderData = {
@@ -77,7 +77,7 @@ describe('TrainerDaddy', () => {
       expect(trainerDaddy.targetColumn).toEqual([100, 1.1, 2])
       expect(trainerDaddy.validationDataCsv).toEqual([
         ['name0', 'name1', 'name2'],
-        ['1.1', 'test', '123.123'],
+        ['1.1', 'test', '123.123']
       ])
       expect(trainerDaddy.validationTargetColumn).toEqual([1])
       expect(trainerDaddy.columnStringValueExpansionList).toEqual({ name1: ['test', '2test'] })
@@ -91,15 +91,15 @@ describe('TrainerDaddy', () => {
     it('With validation data csv without column names', () => {
       const dataWithValidationCsv: BuilderData = {
         ...data,
-        modelValidationData: { 
+        modelValidationData: {
           type: 'Google Spreadsheet',
           url: '',
           sheetName: '',
           csv: [
             ['2', '2test', '2.123', '1.1'],
-            ['3', 'test', '4.123', '2.1'],
-          ],
-        },
+            ['3', 'test', '4.123', '2.1']
+          ]
+        }
       }
 
       const trainerDaddy = new TestTrainerDaddy(dataWithValidationCsv)
@@ -107,7 +107,7 @@ describe('TrainerDaddy', () => {
       expect(trainerDaddy.columnTitles).toEqual(['0', '1', '3'])
       expect(trainerDaddy.targetColumn).toEqual([123.123, 121.123, 122.123, 124.123])
       expect(trainerDaddy.validationDataCsv).toEqual([
-        ['2', '2test', '1.1'], 
+        ['2', '2test', '1.1'],
         ['3', 'test', '2.1']
       ])
       expect(trainerDaddy.validationTargetColumn).toEqual([2.123, 4.123])
@@ -123,16 +123,16 @@ describe('TrainerDaddy', () => {
     it('With validation data csv with column names', () => {
       const dataWithValidationCsv: BuilderData = {
         ...dataWithColumnNames,
-        modelValidationData: { 
+        modelValidationData: {
           type: 'Google Spreadsheet',
           url: '',
           sheetName: '',
           csv: [
             ['name0', 'name1', 'name2', 'name3'],
             ['2', '2test', '2.123', '1.1'],
-            ['3', 'test', '4.123', '2.1'],
-          ],
-        },
+            ['3', 'test', '4.123', '2.1']
+          ]
+        }
       }
 
       const trainerDaddy = new TestTrainerDaddy(dataWithValidationCsv)
@@ -141,11 +141,11 @@ describe('TrainerDaddy', () => {
       expect(trainerDaddy.targetColumn).toEqual([1, 100, 1.1, 2])
       expect(trainerDaddy.validationDataCsv).toEqual([
         ['name0', 'name1', 'name2'],
-        ['2', '2test', '2.123'], 
-        ['3', 'test', '4.123'],
+        ['2', '2test', '2.123'],
+        ['3', 'test', '4.123']
       ])
       expect(trainerDaddy.validationTargetColumn).toEqual([1.1, 2.1])
-      expect(trainerDaddy.columnStringValueExpansionList).toEqual({ 'name1': ['test', '2test'] })
+      expect(trainerDaddy.columnStringValueExpansionList).toEqual({ name1: ['test', '2test'] })
       expect(trainerDaddy.featureColumns).toEqual([
         [1.1, 1, 0, 123.123],
         [1.2, 1, 0, 121.123],
