@@ -231,8 +231,8 @@ export const useBuilderStore = defineStore('builder', {
         throw new Error(`Training for model type ${data.model.type} not yet supported.`)
       }
       const trainer = new TrainerClass(data)
-      await trainer.train()
-      this.trainedModel = 'yayaya'
+      this.trainedModel = await trainer.train()
+      alert(trainer.validate(this.trainedModel))
     },
     async goToModelUI () {
       await router.push({ name: 'model', params: { hash: 'testHash' } })

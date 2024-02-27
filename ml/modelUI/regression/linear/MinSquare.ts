@@ -6,8 +6,14 @@ export class RegressionLinearMinSquare extends ModelUIMama {
     columnsHaveTitles: boolean,
     columnTitles: string[],
     columnStringValueExpansionList: Record<string, string[]>,
-    public readonly modelData: Matrix // tbd private
+    private readonly modelData: Matrix // tbd private
   ) {
     super(columnsHaveTitles, columnTitles, columnStringValueExpansionList)
+  }
+
+  protected innerInfere(featureColumns: number[][]): number[] {
+    const featureColumnsWithConstant = featureColumns.map(row => [...row, 1])
+    const A = new Matrix(featureColumnsWithConstant)
+    return A.mmul(this.modelData).to1DArray()
   }
 }

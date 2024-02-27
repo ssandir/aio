@@ -82,6 +82,11 @@ export abstract class TrainerDaddy {
     return this.trainModel()
   }
 
+  validate (model: ModelUIMama): [number[], number[]] {
+    const validationResult = model.infere({ csv: this.validationDataCsv })
+    return [this.validationTargetColumn, validationResult]
+  }
+
   private separateTargetColumn (csv: string[][], targetColumnIndex: number): number[] {
     const targetColumn = csv.map(row => {
       const entry = row.splice(targetColumnIndex, 1)[0]

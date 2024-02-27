@@ -16,7 +16,7 @@ export abstract class ModelUIMama {
     let { columnTitles, csv } = extractColumnTitles(csvData.csv, this.columnsHaveTitles)
 
     if (this.columnsHaveTitles) {
-      // titleIndex[x]=y means that column y from inference data must be shuffled to column x to match training data
+      // shuffle columns to same order, titleIndex[x]=y means that column y from inference data must be shuffled to column x to match training data
       const titleIndexes: number[] = []
       this.columnTitles.forEach(title => {
         const titleIndex = columnTitles.indexOf(title)
@@ -35,8 +35,10 @@ export abstract class ModelUIMama {
     return normalizeCsvToFeatureColumns(csv, this.columnTitles, this.columnStringValueExpansionList)
   }
 
-  infere (_: CsvData): void {
-    // const normalizedData = this.normalizeData(csvData)
+  protected abstract innerInfere(featureColumns: number[][]): number[]
 
+  infere (csvData: CsvData): number[] {
+    const featureColumns = this.normalizeData(csvData)
+    return this.innerInfere(featureColumns)
   }
 }
