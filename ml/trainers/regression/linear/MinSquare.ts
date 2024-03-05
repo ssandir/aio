@@ -6,8 +6,8 @@ export class RegressionLinearMinSquare extends TrainerDaddy {
   trainModel (): RegressionLinearMinSquareModel {
     const featureColumnsWithConstant = this.featureColumns.map(row => [...row, 1])
     const A = new Matrix(featureColumnsWithConstant)
-    const b = Matrix.columnVector([...this.targetColumn, 1])
-    const y = solve(A, b)
+    const b = Matrix.columnVector(this.targetColumn)
+    const y = solve(A, b, true)
     return new RegressionLinearMinSquareModel(this.columnsHaveTitles, this.columnTitles, this.columnStringValueExpansionList, y)
   }
 }

@@ -43,3 +43,19 @@ export function normalizeCsvToFeatureColumns (csv: string[][], columnTitles: str
   }
   return featureColumns
 }
+
+export function orderColumns (targetColumnTitles: string[], csv: string[][]): string[][] {
+  // shuffle columns to same order, titleIndex[x]=y means that column y from inference data must be shuffled to column x to match training data
+  const titleIndexes: number[] = []
+  targetColumnTitles.forEach(title => {
+    const titleIndex = csv[0].indexOf(title)
+
+    if (titleIndex < 0) {
+      throw new Error(`Missing column with title "${title}".`)
+    }
+
+    titleIndexes.push(titleIndex)
+  })
+
+  return csv.map(row => titleIndexes.map(titleIndex => row[titleIndex]))
+}

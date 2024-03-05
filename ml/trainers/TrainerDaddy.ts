@@ -1,5 +1,5 @@
 import type { BuilderData } from '@shared/types'
-import { extractColumnTitles, normalizeCsvToFeatureColumns } from '../shared/csvDataNormalizaton'
+import { extractColumnTitles, normalizeCsvToFeatureColumns, orderColumns } from '../shared/csvDataNormalizaton'
 import { ModelUIMama } from 'modelUI/ModelUIMama'
 
 export abstract class TrainerDaddy {
@@ -42,13 +42,16 @@ export abstract class TrainerDaddy {
       throw new Error(`Target column "${targetColumnName}" not found.`)
     }
     this.targetColumn = this.separateTargetColumn(csv, targetColumnIndex)
-    const validationColumnTitlesData = extractColumnTitles(csvRaw, this.columnsHaveTitles)
+    const validationColumnTitlesData = extractColumnTitles(this.validationDataCsv, this.columnsHaveTitles)
     const validationTargetColumnIndex = validationColumnTitlesData.columnTitles.indexOf(targetColumnName)
     this.validationTargetColumn = this.separateTargetColumn(this.columnsHaveTitles ? this.validationDataCsv.slice(1) : this.validationDataCsv, validationTargetColumnIndex)
 
     columnTitles.splice(targetColumnIndex, 1)
-    if (this.columnsHaveTitles) this.validationDataCsv[0].splice(targetColumnIndex, 1)
     this.columnTitles = columnTitles // used for potentially reordering columns
+    if (this.columnsHaveTitles) {
+      this.validationDataCsv[0].splice(validationTargetColumnIndex, 1)
+      this.validationDataCsv = orderColumns(columnTitles, this.validationDataCsv) // avoid trouble if data from different source is ordered differently (TBD: maybe just re-find targetColumn)
+    }
 
     // generate columnStringValueExpansionList, take string values from training data and validation data
     for (let NColumn = 0; NColumn < csv[0].length; ++NColumn) {

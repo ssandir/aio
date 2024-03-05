@@ -4,7 +4,9 @@ import { BuilderData } from '@shared/types'
 
 jest.mock('../modelUI/ModelUIMama')
 
-class TestModelUIMama extends ModelUIMama {}
+class TestModelUIMama extends ModelUIMama {
+  innerInfere (): number[] { return [] }
+}
 
 class TestTrainerDaddy extends TrainerDaddy {
   trainModel (): ModelUIMama {

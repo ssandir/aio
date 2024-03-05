@@ -1,5 +1,5 @@
 import { CsvData } from '@shared/types'
-import { extractColumnTitles, normalizeCsvToFeatureColumns } from '../shared/csvDataNormalizaton'
+import { extractColumnTitles, normalizeCsvToFeatureColumns, orderColumns } from '../shared/csvDataNormalizaton'
 
 export abstract class ModelUIMama {
   constructor (
@@ -13,23 +13,12 @@ export abstract class ModelUIMama {
       throw new Error("Number of columns doesn't match training data.")
     }
 
-    let { columnTitles, csv } = extractColumnTitles(csvData.csv, this.columnsHaveTitles)
-
+    let orderedRawCsv = csvData.csv
     if (this.columnsHaveTitles) {
-      // shuffle columns to same order, titleIndex[x]=y means that column y from inference data must be shuffled to column x to match training data
-      const titleIndexes: number[] = []
-      this.columnTitles.forEach(title => {
-        const titleIndex = columnTitles.indexOf(title)
-
-        if (titleIndex < 0) {
-          throw new Error(`Missing column with title "${title}".`)
-        }
-
-        titleIndexes.push(titleIndex)
-      })
-
-      csv = csv.map(row => titleIndexes.map(titleIndex => row[titleIndex]))
+      orderedRawCsv = orderColumns(this.columnTitles, orderedRawCsv)
     }
+
+    const { csv } = extractColumnTitles(orderedRawCsv, this.columnsHaveTitles)
 
     // feature columns
     return normalizeCsvToFeatureColumns(csv, this.columnTitles, this.columnStringValueExpansionList)
