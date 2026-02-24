@@ -1,4 +1,6 @@
-# essentials
+Machine learning made easy and accessible.
+
+# Essentials
 
 ## Project setup
 
