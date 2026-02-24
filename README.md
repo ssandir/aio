@@ -1,4 +1,4 @@
-Machine learning made easy and accessible.
+# Machine learning made easy and accessible.
 
 # Essentials
 
